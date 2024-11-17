@@ -183,9 +183,6 @@ export default {
         overflow:hidden;
         margin-top:16px;
         padding:16px;
-        /* margin:16px auto; */
-        /* overflow:hidden; */
-        /* padding: 16px; */
         background:rgba(15,10,45,1);
     }
     .envBox{

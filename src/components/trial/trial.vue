@@ -123,6 +123,17 @@ export default {
         }
     }
 }
+//for(let i=0;i<width; i+=1){
+    //toX = i//cenX + ( radius * Math.cos(i*radian) )
+    //toY = y2 - ( radius * Math.sin(this.mapper(i,0,width,0,360)*radian) ) //this is solution to LFO arc i think
+//}
+// pathstring += `L ${x2} ${y2}`
+// let radiusX = width/2
+// let radiusY = height/2 
+// let rotation = 0
+// let largArc = 0
+// let sweep = 0 //this turns to 1 above 0 !
+//pathstring += `A ${radiusX} ${radiusY} ${rotation} ${largArc} ${sweep} ${x2} ${y2}`
 </script>
 <style >
     .trial{
@@ -134,3 +145,5 @@ export default {
         overflow:visible;
     }
 </style>
+
+

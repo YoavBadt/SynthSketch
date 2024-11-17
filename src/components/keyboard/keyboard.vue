@@ -63,18 +63,31 @@ export default {
                 }
             },deep:true
         },
-        adsr(newAdsr,oldAdsr){
+        adsr:{
+            handler(newAdsr,oldAdsr){
+            let adsr = {}
+            adsr.attack = store.env1.adsr.attack.value
+            adsr.decay = store.env1.adsr.decay.value
+            adsr.sustain = store.env1.adsr.sustain.value
+            adsr.release = store.env1.adsr.release.value        
 
             this.synth = new Synth({
-                        envelope: store.env1.adsr,
+                        envelope: adsr,
                         oscillator : {
                             type : store.osc1.type,
                         }
                     }).toDestination();
+            },deep:true
         },
         osc(oldOsc,newOsc){
+            let adsr = {}
+            adsr.attack = store.env1.adsr.attack.value
+            adsr.decay = store.env1.adsr.decay.value
+            adsr.sustain = store.env1.adsr.sustain.value
+            adsr.release = store.env1.adsr.release.value     
+
             this.synth = new Synth({
-                        envelope: store.env1.adsr,
+                        envelope: adsr,
                         oscillator : {
                             type : store.osc1.type,
                         }
@@ -177,9 +190,15 @@ export default {
                     frequency : frequencies[s][this.octave]
                 }
         )})    
-    
+                
+        let adsr = {}
+            adsr.attack = store.env1.adsr.attack.value
+            adsr.decay = store.env1.adsr.decay.value
+            adsr.sustain = store.env1.adsr.sustain.value
+            adsr.release = store.env1.adsr.release.value           
+
         this.synth = new Synth({
-                        envelope: store.env1.adsr,
+                        envelope: adsr,
                         oscillator : {
                             type : store.osc1.type,
                         }

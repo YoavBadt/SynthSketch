@@ -9,15 +9,10 @@
         </div>
 
         <div class="envControls">
-            <EnvVisual 
-                v-model:delay="faders.delay.value"      
-                v-model:attack="faders.attack.value"     v-model:attackCurve="faders.attack.curve"
-                v-model:decay="faders.decay.value"       v-model:decayCurve="faders.decay.curve"
-                v-model:sustain="faders.sustain.value" 
-                v-model:release="faders.release.value"   v-model:releaseCurve="faders.release.curve"
-            />
+            <EnvVisual2 />
+            
             <div class="knobs">
-              <Knob v-for="item in faders" v-model.number="item.value" :soft="item.soft" :show="item.show" :name="item.name" :min="item.minmax.min" :max="item.minmax.max" :step="item.step"/>
+              <Knob v-for="item in getEnv.adsr" v-model.number="item.value" :soft="item.soft" :show="item.show" :name="item.name" :min="item.minmax.min" :max="item.minmax.max" :step="item.step"/>
             </div>
         </div>
 
@@ -26,12 +21,12 @@
 </template>
 
 <script>
-import EnvVisual from './envVisual.vue'
+import EnvVisual2 from './envVisual2.vue'
 import ModBox from '../../components/mods/modBox.vue'
 import {store} from '../../store/store.js'
 
 export default {
-    components:{EnvVisual,ModBox},
+    components:{ModBox,EnvVisual2},
     props:['env1'],
     emits:['update:env1'],
   data(){
@@ -54,51 +49,12 @@ export default {
           active : false
         }
       ],
-      faders : {
-        delay : {
-          name:'Delay',
-          value : 0,
-          minmax : { min: 0,max: 2},
-          step: 0.001,
-          show : true,
-          soft : 4
-        },
-        attack: {
-          name:'Attack',
-          value : store.env1.adsr.attack,
-          curve :50,
-          minmax : { min: 0,max: 2},
-          step: 0.01,
-          show : true,
-          soft : 4
-        },
-        decay : {
-          name:'Decay',
-          value : store.env1.adsr.decay,
-          curve : 50,
-          minmax : { min: 0,max: 2},
-          step: 0.01,
-          show : true,
-          soft : 4
-        },  
-        sustain:{
-          name:'Sustain',
-          value : store.env1.adsr.sustain,
-          minmax : { min: 0,max: 1},
-          step: 0.01,
-          show : true,
-          soft : 2
-        },
-        release:{
-          name: 'Release',
-          value : store.env1.adsr.release,
-          curve : 50,
-          minmax : { min: 0,max: 2},
-          step: 0.01,
-          show : true,
-          soft : 4
-        }
-      }
+      
+    }
+  },
+  computed:{
+    getEnv(){
+      return store.env1
     }
   },
   methods:{

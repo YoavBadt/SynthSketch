@@ -77,7 +77,7 @@ export default{
   created(){
     //this is just for dev
     // document.body.style.zoom = "200%"
-    // window.scrollTo(2300, 20)
+    // window.scrollTo(1200, 20)
   }
 
 }

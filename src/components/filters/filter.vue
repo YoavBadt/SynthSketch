@@ -4,14 +4,14 @@
         <div class="filter_box">
 
             <FilterVisual />
-            <ResoSlider storeValue="resonance"/>
+            <ResoSlider/>
 
         </div>
         
         <div class="filter_knobs">
-            <CutSlider storeValue="cutoff" min="-52" max="76" step="0.1" />
+            <CutSlider />
         </div>
-        {{store.filter1.cutoff}} : {{store.filter1.resonance}}
+        
     </div>
 </template>
 <script>

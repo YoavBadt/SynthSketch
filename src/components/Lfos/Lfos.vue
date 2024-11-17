@@ -2,7 +2,7 @@
     <div class="LFOs">
         <div class="LFO_head">
             
-            <Title name="LFO"  width="64px"/>
+            
             <div class="LFO_paint">paint</div>
             <LfoGrid/>
             <div class="LFO_curve">c</div>
@@ -60,10 +60,10 @@ export default {
 </script>
 <style >
     .LFOs{
-       padding-top:16px;
-       padding-bottom:16px;
-       padding-left:16px;
-       padding-right:32px;
+       padding:16px 32px 16px 16px;
+       border-bottom:1px solid rgba(0,0,0,0.2);
+       box-shadow: inset 1px 1px 1px 1px rgba(255,255,255,0.2),
+       inset -2px -1px 1px 1px rgba(0,0,0,0.1);
     }
     .LFO_head{
         width:100%;

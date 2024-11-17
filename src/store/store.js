@@ -21,8 +21,12 @@ export const store = reactive({
     },
     filter1 : {
         type : "highpass",
-        cutoff : 15, 
-        resonance : 0
+        cutoff : 15,
+        cutMin: -52,
+        cutMax:72,
+        resonance : 50,
+        resMin: 0,
+        resMax: 100
     },
     filter2 :{},
     keyboard : {
@@ -31,10 +35,50 @@ export const store = reactive({
     },
     env1 : {
         adsr : {
-            attack:0,
-            decay:1,
-            sustain:0.5,
-            release:1.3
+            delay : {
+                name:'delay',
+                value : 0,
+                minmax : { min: 0,max: 2},
+                step: 0.01,
+                show : true,
+                soft : 4
+              },
+              attack: {
+                name:'attack',
+                value : 1,
+                curve :50,
+                minmax : { min: 0,max: 2},
+                step: 0.01,
+                show : true,
+                soft : 4
+              },
+              decay : {
+                name:'decay',
+                value : 0.5,
+                curve :50,
+                minmax : { min: 0,max: 2},
+                step: 0.01,
+                show : true,
+                soft : 4
+              },  
+              sustain:{
+                name:'sustain',
+                value :0.5,
+                minmax : { min: 0,max: 1},
+                curve: false,
+                step: 0.01,
+                show : true,
+                soft : 2
+              },
+              release:{
+                name: 'release',
+                value : 1,
+                curve : 50,
+                minmax : { min: 0,max: 2},
+                step: 0.01,
+                show : true,
+                soft : 4
+              }
         }
     },
     env2 :{},

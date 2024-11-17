@@ -1,17 +1,11 @@
 <template >
     <div class="cut_box"
-        @mouseup="drag = false"
-        @mousemove="drag ? startDrag($event) : null"
-        @mouseenter="checkMouse"
-        @mouseleave ="checkMouse"
+        
     >
         <div class="cut_pointer" :style="{'left': getH + '%'}"
         @mouseup="drag = false"
         @mousemove="drag ? startDrag($event) : null"
         @mousedown.prevent="{add();drag = true}"
-        
-        
-        
         ></div>
         
         <div class="cut">
@@ -23,7 +17,7 @@
 <script>
 import {store} from '../../store/store.js'
 export default {
-    props:['storeValue','min','max','step'],
+    
     
     data(){
         return{
@@ -33,8 +27,10 @@ export default {
     },
     computed:{
         getH(){
-            let w = store.filter1[this.storeValue]
-            this.min ? w = this.mapper(w,this.min,this.max,0,100) :  null
+            let w = store.filter1.cutoff
+            let min = store.filter1.cutMin
+            let max = store.filter1.cutMax
+            w = this.mapper(w,min,max,0,86)
             return w //{width : w + '%'}
         }
     },
@@ -49,28 +45,27 @@ export default {
             document.removeEventListener('mouseup',this.checkMouse)
         },
         startDrag(event){
-            // console.log(event)
-            let w = store.filter1[this.storeValue]
-
-            let num = event.movementX/2 //*0.01//* this.step
-            // num = num * 1000
-            num = Math.trunc(num)
-            // num = num/1000
-            // console.log(num)
-
-            let newVal = w + num 
-
-            // newVal = Math.floor(newVal)
+     
+            let w = store.filter1.cutoff
+            let min = store.filter1.cutMin
+            let max = store.filter1.cutMax
             
-            if(newVal < this.min){
-                newVal = this.min
-            }else if(newVal > this.max){
-                newVal = this.max
+            let num = event.movementX 
+
+            // w = this.mapper(w,min,max,0,224)
+            w = w + num
+            // w = this.mapper(w,0,224,min,max)
+            w = Math.floor(w)
+ 
+            
+            if(w < min){
+                w = min
+            }else if(w > max){
+                w = max
             }
 
-
             let newFilter = store.filter1
-            newFilter[this.storeValue] = newVal
+            newFilter.cutoff = w
             store.updateFilter1({...newFilter})
         },
         mapper(value, x1, y1, x2, y2){
@@ -83,13 +78,13 @@ export default {
     .cut_box{
         width:224px;
         height:32px;
-        background: #9e9e9e;
-        outline:1px solid rgba(0,0,0,0.2);
+        /* background: #9e9e9e; */
+        /* outline:1px solid rgba(0,0,0,0.2); */
+        /* box-shadow: inset 1px 1px 3px 0px rgba(255,255,255,0.3); */
         border-radius:0 0 6px 6px;
         padding-top:12px;
-        overflow:hidden;
+        /* overflow:hidden; */
         position:relative;
-        box-shadow: inset 1px 1px 3px 0px rgba(255,255,255,0.3);
     }
     .cut{
         width:100%;
@@ -104,10 +99,10 @@ export default {
         background:#FF9F1E;
     }
     .cut_pointer{
-        height:32px;
-        width:12px;
+        height:12px;
+        width:32px;
         position:absolute;
-        top:0;
+        top:10px;
         background:#9e9e9e;
         border-radius:4px;
         outline:1px solid rgba(0,0,0,0.2);
