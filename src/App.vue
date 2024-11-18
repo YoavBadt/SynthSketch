@@ -40,7 +40,7 @@
 <script>
 import {store} from './store/store.js'
 import Envelopes  from './components/envelopes/envelopes.vue'
-import Lfos from './components/Lfos/Lfos.vue'
+import Lfos from './components/Lfos/lfos.vue'
 import Osc from './components/oscilators/osc.vue'
 import Filter from './components/filters/filter.vue'
 import Keyboard from './components/keyboard/keyboard.vue'
