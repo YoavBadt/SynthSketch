@@ -36,7 +36,7 @@
 <script>
 import {store} from '../../store/store.js'
 import OscSelect from './oscSelect.vue'
-import OscVisual from './OscVisual.vue'
+import OscVisual from './oscVisual.vue'
 export default {
     props:['name','oscNum'],
     components:{OscSelect,OscVisual},
