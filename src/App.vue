@@ -1,7 +1,10 @@
 <template>
     <div>
         <button :style="{'width' : '200px' }" @click="init">elemantary init</button>
-        <button :style="{'width' : '200px' }" @click="play">elemantary play</button>
+        <button :style="{'width' : '200px' }" 
+        @mousedown="play(1,240)"
+        @mouseup="stop"
+        >elemantary play</button>
         <Synth/> 
     </div>
 </template>
@@ -15,6 +18,13 @@ const core = new WebRenderer();
 
 
 export default {
+    data(){
+        return{
+            freq:440,
+            gate : null,
+            setGate: null
+        }
+    },
    components : {
     Synth
    },
@@ -28,19 +38,39 @@ export default {
         // console.log(node)
         node.connect(ctx.destination);
         
-
+        
         // console.log(stats);
         // })();
     },
-    play(){
-        let [cutoff, setCutoffFreq] = core.createRef("const", {value: 200}, []);
+    synth(vs){
+        // return el.add(vs.map(function(v){
+        //     return el.mul(v.gate,el.cycle(v.freq))
+        // }))
+    },
+    updateVoices(voices,e){
+        // this.voices[0].gate = e
+        // return this.voices
+    },
+    play(e,freq){
+        // let [cutoff, setCutoffFreq] = core.createRef("const", {value: 200}, []);
 
-        core.render(el.lowpass(cutoff, 1.0, el.in({channel:0}) ))
+        // core.render(el.lowpass(500, 1.0, el.in({channel:0}) ))
 
+        // let voice = el.add( el.mul(e,el.cycle(freq)) )
+
+        [this.gate,this.setGate] = core.createRef("const", {value:1}, [])
+
+        let env = el.smooth( el.select(this.gate,el.tau2pole(0.5),el.tau2pole(1)), this.gate )
+        let out = el.mul(0.2, env, el.saw(freq) )
+        let filter = el.bandpass( 1200 , 1.0, out)
         // let newCutoff = 500
-        // setCutoffFreq({value: newCutoff});
 
-        core.render( el.mul( 0.5 , el.cycle(440) ) )  
+        // setCutoffFreq({value: newCutoff});
+        // let vs = this.updateVoices(this.voices,e)
+        core.render( filter  )
+    },
+    stop(){
+        this.setGate({value: 0})
     }
    }
    
