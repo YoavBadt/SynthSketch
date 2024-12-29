@@ -27,6 +27,9 @@
                 
             </div>
 
+            <div>
+                <Voices />
+            </div>
             
 
             
@@ -37,9 +40,11 @@
 import {store} from '../../store/store.js'
 import OscSelect from './oscSelect.vue'
 import OscVisual from './oscVisual.vue'
+import Voices from './voices.vue'
+
 export default {
     props:['name','oscNum'],
-    components:{OscSelect,OscVisual},
+    components:{OscSelect,OscVisual,Voices},
     data(){
         return {
             osc : {

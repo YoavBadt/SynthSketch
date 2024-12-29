@@ -84,7 +84,7 @@ export default {
                     let newWidth
                     newWidth = this.mapper(val,min,max,0,this.zoom/max)
                     newWidth = this.mapper(newWidth,0,this.zoom,0,this.width)
-                    newWidth < 0.1 ? newWidth = 3 : null
+                    newWidth < 0.1 ? newWidth = 0 : null
 
                     let path = {
                         x1: 0,
@@ -228,9 +228,9 @@ export default {
             let curveX = this.mapper(curve,0,100,x1,x2)
             let curveY = this.mapper(curve,0,100,y2,y1)
             
-            name === 'attack' ? polyPath += `Q${curveX} ${curveY} ${x2} ${y2} L ${x2} ${y1}` : null
-            name === 'decay' ? polyPath += `Q${curveX} ${curveY} ${x2} ${y2} L ${x2} ${y2+this.height-y2} ${x1} ${y2+this.height-y2}` : null
-            name === 'release' ? polyPath += `Q${curveX} ${curveY} ${x2} ${y2} L ${x1-1} ${y2+1}` : null
+            name === 'attack'  ? polyPath += `Q${curveX} ${curveY} ${x2} ${y2} L ${x2} ${y1}` : null
+            name === 'decay'   ? polyPath += `Q${curveX} ${curveY} ${x2} ${y2} L ${x2} ${y2+this.height-y2} ${x1} ${y2+this.height-y2}` : null
+            name === 'release' ? polyPath += `Q${curveX} ${curveY} ${x2} ${y2} L ${x1} ${y2+1}` : null
            
 
             return polyPath
