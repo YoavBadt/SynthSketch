@@ -96,14 +96,14 @@ export default {
     }
     .cut_marker{
         box-shadow:  inset 0px 1px 2px 0px rgba(0,0,0,0.5);
-        background:#FF9F1E;
+        background:var(--highlight);
     }
     .cut_pointer{
         height:12px;
         width:32px;
         position:absolute;
         top:10px;
-        background:#9e9e9e;
+        background:var(--back);
         border-radius:4px;
         outline:1px solid rgba(0,0,0,0.2);
         box-shadow: inset 0px 1px 3px 0px rgba(255,255,255,0.3),1px 1px 1px 1px rgba(0,0,0,0.3);

@@ -13,7 +13,8 @@
             </g> 
 
             <g v-for="item in this.rects">
-                <rect :x="item.x" :y="item.y" :width="item.width" :height="item.height" stroke-width="1" fill="none" stroke="rgba(256,0,0,0.2)"/>
+                <!-- this is for debugging -->
+                <rect :x="item.x" :y="item.y" :width="item.width" :height="item.height" stroke-width="0" fill="none" stroke="red"/>
             </g>
 
             <!-- LFO path -->

@@ -9,7 +9,7 @@
             <svg id="svg" class="KnobSvg" :width="width" :height="width"  >
                 <circle id="back":r="r" :cx="c" :cy="c" fill="transparent" 
                 :stroke-width='r/3'
-                style="stroke: #9e9e9e"
+                style="stroke: var(--back)"
                 :transform="`rotate(118 ${c} ${c})`"
                 :stroke-dasharray="r*val"
                 stroke-dashoffset="20" 
@@ -19,7 +19,7 @@
                 
                 id="bar" :r="r" :cx="c" :cy="c" fill="transparent" 
                 :stroke-width='r/3'
-                style="stroke: #FF9F1E"
+                style="stroke: var(--highlight)"
                 :transform="`rotate(118 ${c} ${c})`"
                 :stroke-dasharray="r*val" 
                 :stroke-dashoffset="getP"
@@ -30,7 +30,7 @@
                 >
                     <!-- <circle id ="dial" stroke="black" :r="r-r/6" fill="#0f0a2d" :cx="c" :cy="c"/> -->
                     <line :x1="c" :y1="c" :x2="c" :y2="c+r+4" style="stroke:rgba(0,0,0,0.8); stroke-width:10" stroke-linecap="round"/>
-                    <line :x1="c" :y1="c" :x2="c" :y2="c+r+4" style="stroke:#9e9e9e; stroke-width:4" stroke-linecap="round"/>
+                    <line :x1="c" :y1="c" :x2="c" :y2="c+r+4" style="stroke:var(--back); stroke-width:4" stroke-linecap="round"/>
                 </g>
             </svg>
             <div class="knobShadow" :style="`width:${r*2+8*1.5}px;height:${r*2+8*1.5}px`"> </div>
@@ -141,7 +141,7 @@ export default {
         border-radius:50%;
         width:68px;
         height:68px;
-        background:#9e9e9e;
+        background:var(--back);
         box-shadow: inset 2px 2px 3px 1px rgba(255,255,255,0.1);
         outline: 1px solid rgba(0,0,0,0.15);
     }
@@ -155,7 +155,7 @@ export default {
         border-radius:1px;
         outline: 1px solid rgba(0,0,0,0.15);
         box-shadow: inset 2px 2px 0px 0px rgba(255, 255, 255, 0);
-        background:#9e9e9e;
+        background:var(--back);
         color: #0f0a2d
         
     }

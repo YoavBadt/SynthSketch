@@ -86,6 +86,8 @@ export default {
   /* display:flex; */
   /* flex-direction:row; */
   /* width:486px; */
+  box-shadow: var(--card);
+  background:var(--grad);
   border-bottom:1px solid rgba(0,0,0,0.2);
 }
 .env_box{

@@ -15,7 +15,7 @@ export default {
         /* border-bottom:1px solid rgba(0,0,0,0.2); */
         outline:1px solid rgba(0,0,0,0.2);
 
-        background-color: #9e9e9e;
+        background-color: var(--back);
         padding-left:4px;
         height:16px;
         /* margin: 0 auto; */

@@ -62,8 +62,8 @@ export default {
     .LFOs{
        padding:16px 32px 16px 16px;
        border-bottom:1px solid rgba(0,0,0,0.2);
-       box-shadow: inset 1px 1px 1px 1px rgba(255,255,255,0.2),
-       inset -2px -1px 1px 1px rgba(0,0,0,0.1);
+       box-shadow: var(--card);
+       background:var(--grad);
     }
     .LFO_head{
         width:100%;

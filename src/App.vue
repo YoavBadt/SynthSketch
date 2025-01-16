@@ -1,10 +1,13 @@
 <template>
     <div>
+<!-- 
         <button :style="{'width' : '200px' }" @click="init">elemantary init</button>
         <button :style="{'width' : '200px' }" 
         @mousedown="play(1,240)"
         @mouseup="stop"
-        >elemantary play</button>
+        >elemantary play</button> 
+-->
+
         <Synth/> 
     </div>
 </template>

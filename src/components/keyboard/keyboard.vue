@@ -210,7 +210,6 @@ export default {
 </script>
 <style >
     .keyboard{
-        height:100%;
         height:144px;
         overflow:hidden;
         position:relative;
@@ -276,12 +275,12 @@ export default {
         padding-bottom:15px;
         border-radius:0 0 5px 5px;
         outline:1px solid rgba(0,0,0,0.2);
-        background:#9e9e9e;
+        background:var(--grad),var(--back);
         box-shadow: inset 0px -4px 0px 1px rgba(0,0,0,0.15);
     }
     .key_press_flat{
         box-shadow: 0px 4px 0px 1px rgba(0,0,0,0.1);
-        background:linear-gradient(to bottom, #888888 0px,#9e9e9e 25%);
+        background:linear-gradient(to bottom, var(--back-selected) 0px, var(--back) 25%);
         padding-bottom:10px;
     }
     

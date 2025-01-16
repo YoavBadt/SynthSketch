@@ -34,10 +34,10 @@ export default {
 <style >
     .filter{
         width:290px;
-        height:224px;
+        height:208px;
         padding:16px 16px 16px 16px;
-        /* bump */
-        box-shadow: inset 1px 1px 0px 0px rgba(255,255,255,0.1),inset -1px -1px 0px 0px rgba(0,0,0,0.1);
+        box-shadow: var(--card);
+        background:var(--grad);
     }
     .filter_box{
         display: flex;

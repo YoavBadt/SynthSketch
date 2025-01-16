@@ -37,18 +37,19 @@ button{
   border-radius:5px;
 
   box-shadow: inset 2px 2px 3px 1px rgba(255,255,255,0.2);
-  background:#9e9e9e;
+  background:var(--back);
   outline:1px solid rgba(0,0,0,0.15);
   text-shadow: rgba(255,255,255,0.4) 0px 1px 1px;  
 }
 button:active{
-  background: #8c8c8c;
+  
+  background: var(--back-active);
   box-shadow: inset 2px 2px 3px 1px rgba(0,0,0,0.2);
 }
 .button_selected{
-  color:rgb(255, 172, 17);
-  background:#909090;
-  /* background: #8c8c8c; */
+  color:var(--highlight);
+  
+  background: var(--back-selected);
   box-shadow: inset 1px 1px 1px 1px rgba(0,0,0,0.2);
 
   /* background:rgb(172, 146, 99); */

@@ -27,9 +27,9 @@
                 
             </div>
 
-            <div>
+            <!-- <div>
                 <Voices />
-            </div>
+            </div> -->
             
 
             
@@ -85,18 +85,19 @@ export default {
 </script>
 <style >
     .oscilator{
-        width:100%;
+        width:calc(36 * 16px);
         height: 208px;
         padding-top:16px;
-        padding-left:16px;
-        padding-right:16px;
+        padding-right:32px;
+        padding-left:calc(2 * 16px);
         border-bottom:1px solid rgba(0,0,0,0.2);
         display:flex;
         flex-direction:row;
         gap:16px;
 
         /* bump */
-        box-shadow: inset 1px 1px 0px 0px rgba(255,255,255,0.1),inset -1px -1px 0px 0px rgba(0,0,0,0.1);
+        box-shadow: var(--card);
+        background:var(--grad)
     }
     
     

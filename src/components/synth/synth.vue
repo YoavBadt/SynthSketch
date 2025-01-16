@@ -9,7 +9,7 @@
         
       <div class="left">
         <div class="left_top">
-          <div class="macros"></div>
+          <!-- <div class="macros"></div> -->
           <div class="generators">
              <div class="oscilators">
               <Osc name="Oscilator 1" oscNum="1"/>
@@ -21,17 +21,17 @@
             </div>
           </div>
         </div>
-        <Keyboard />
+        
       </div>
         <div class="right">
           <Envelopes />
           <Lfo/>
            <!-- <Trial /> -->
         </div>
-
+        
       <!-- close row -->
       </div>
-
+      <Keyboard />
         
     </div>
   
@@ -80,21 +80,22 @@ export default{
 
 <style >
   .Synth{
-    width:1280px;
-    height: 928px;
+    width:calc(77 * 16px);
+    height: calc(53 * 16px);
     outline:1px solid black;
     overflow:hidden;
     border-radius:8px;
-    background:#9e9e9e;
+    
+    background: var(--back);
     /* background:#4a5c70; */
     
     /* lines */
     background-size: 16px 16px;
     background-image:
-    linear-gradient(to right, rgba(0,0,0,0.05) 1px, transparent 1px),
-    linear-gradient(to bottom, rgba(0,0,0,0.05) 1px, transparent 1px);
+    linear-gradient(to right, var(--grid) 1px, transparent 1px),
+    linear-gradient(to bottom, var(--grid) 1px, transparent 1px);
     
-    box-shadow: 5px 5px 20px 20px rgba(0,0,0,0.1),inset 2px 2px 3px 1px rgba(255,255,255,0.2);
+    box-shadow: 5px 15px 20px 2px rgba(0,0,0,0.25),inset 2px 2px 3px 1px rgba(255,255,255,0.2);
   }
   .topbar{
     width:100%;
@@ -104,25 +105,25 @@ export default{
   }
   .row2{
     width:100%;
-    height:100%;
+    height:calc(40 * 16px);
     /* border-bottom:1px solid rgba(0,0,0,0.2); */
     display:flex;
     flex-direction: row;
   }
   .left{
-    width: 672px;
+    width: calc(38 * 16px);
     height: 100%;
     border-right:1px solid rgba(0,0,0,0.2);
   }
   .left_top{
     width:672px;
-    height:720px;
+    height:calc(39 * 16px);
     border-bottom:1px solid rgba(0,0,0,0.2);
     display:flex;
     flex-direction:row;
   }
   .macros{
-    width:96px;
+    width:calc(2 * 16px);
     height:100%;
     /* padding-right:16px; */
     padding-top:16px;
