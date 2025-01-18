@@ -36,28 +36,30 @@ export default {
     },
     methods:{
         keyState(myKey,action){
+            let myNoteEvent
             
-            if(action === 'down'){
-
-                myKey.pressed = true
-                noteEvent('noteOn',myKey.frequency,myKey.name,myKey.octave)
-
-            }else if(action === 'up'){
-
-                myKey.pressed = false
-                noteEvent('noteOff',myKey.frequency,myKey.name,myKey.octave)
-
-            }else if(action === 'leave' && this.mouseDown){
-
-                myKey.pressed = false
-                noteEvent('noteOff',myKey.frequency,myKey.name,myKey.octave)
-
-            }else if(action === 'enter' && this.mouseDown){
-                
-                myKey.pressed = true
-                noteEvent('noteOn',myKey.frequency,myKey.name,myKey.octave)
-
+            switch(action){
+                case 'down' : 
+                    myKey.pressed = true
+                    myNoteEvent = 'noteOn'
+                    break;
+                case 'up' : 
+                    myKey.pressed = false
+                    myNoteEvent = 'noteOff'
+                    break;
+                case 'leave' : 
+                    this.mouseDown ? myKey.pressed = false : null
+                    this.mouseDown ? myNoteEvent = 'noteOff' :  null
+                    break;
+                case 'enter' : 
+                    this.mouseDown ? myKey.pressed = true : null
+                    this.mouseDown ? myNoteEvent = 'noteOn' :  null
+                    break;
+                default:
+                    break;
             }
+           
+            myNoteEvent ? noteEvent(myNoteEvent ,myKey.frequency,myKey.name,myKey.octave) : null
 
         },
         getFixed(i){
