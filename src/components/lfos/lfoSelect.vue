@@ -61,15 +61,13 @@ export default {
 
 <style >
     .LFO_select{
-
-    width:208px;
-    background: rgba(15,10,45,1);
-    color:#3eaef3;
-    border-radius:3px;
+    
+    /* border-radius:3px; */
     display:flex;
     flex-direction: row;
     justify-content: center;
     align-items:space-between;
+    border-left:1px solid var(--viz-high-soft);
     }
     .LFO_select_btn{
         height:32px;
@@ -79,6 +77,7 @@ export default {
     }
     .LFO_select_txt{
         line-height:32px;
-        width:144px;
+        flex:1;
+        /* width:144px; */
     }
 </style>

@@ -247,7 +247,6 @@ export default {
         height:176px;
         border-radius:5px;
         overflow:hidden;
-        margin-top:16px;
         padding:16px;
         background:rgba(15,10,45,1);
     }

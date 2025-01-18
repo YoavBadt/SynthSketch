@@ -21,7 +21,7 @@ export default {
     data(){
         return{
             width:176,
-            height:112
+            height:112-0
         }
     },
     computed:{
@@ -58,7 +58,7 @@ export default {
 <style>
   .osc_window{
         width :192px;
-        height: 128px;
+        height: calc(128px - 0);
         padding:8px;
         background: rgba(15,10,45,1);
         color: rgba(62, 174, 243,1);

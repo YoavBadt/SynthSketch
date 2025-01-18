@@ -90,10 +90,6 @@ export default {
 </script>
 <style >
 .LFO_grid{
-    width:96px;
-    background: rgba(15,10,45,1);
-    color:#3eaef3;
-    border-radius:3px;
     display:flex;
     flex-direction: row;
 }

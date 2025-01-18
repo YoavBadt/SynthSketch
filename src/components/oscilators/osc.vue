@@ -1,8 +1,8 @@
 <template >
     <div class="oscilator">
             <div class="osc_knobs">
-                
-                <Title :name="name" width="100%" />
+                <Title :name="name" width="100%" style="margin-bottom : 16px"/>
+                <!-- <div class="viz_head" >{{ name }}</div> -->
                 <div class="osc_digits_box">
                     <div class="osc_digits" style="border-right:1px solid rgba(62, 174, 243,1)">
                         <h3>12</h3>
@@ -22,6 +22,7 @@
             </div>
 
             <div class="osc_middle">
+                
                 <OscVisual :oscType="stateOsc.type"/>
                 <OscSelect :oscNum="oscNum"/>
                 
@@ -85,15 +86,13 @@ export default {
 </script>
 <style >
     .oscilator{
-        width:calc(36 * 16px);
+        width:100%;
         height: 208px;
-        padding-top:16px;
-        padding-right:32px;
-        padding-left:calc(2 * 16px);
+        padding:16px 32px;
         border-bottom:1px solid rgba(0,0,0,0.2);
         display:flex;
         flex-direction:row;
-        gap:16px;
+        gap:32px;
 
         /* bump */
         box-shadow: var(--card);
@@ -109,7 +108,7 @@ export default {
         width:160px;
         height: 48px;
         
-        margin-top:16px;
+        /* margin-top:16px; */
         display:flex;
         flex-direction:row;
         align-items: center;
@@ -119,7 +118,7 @@ export default {
         width:50%;
     }
     .osc_knobs{
-        width: 160px;
+        /* width: 160px; */
         /* padding-left:16px; */
         /* padding-right:16px; */
         /* margin-right:16px; */
@@ -133,15 +132,16 @@ export default {
     }
     .osc_buttons{
         width:64px;
-        display:flex;
+        /* display:flex; */
         flex-direction:column;
         align-items:center;
         gap:16px;
         margin-right:16px;
     }
     .osc_middle{
-        width :192px;;
-        height:100%;
+        /* width :192px; */
+        /* height:100%; */
+        
     }
     
     

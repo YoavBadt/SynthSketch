@@ -33,9 +33,9 @@ export default {
 </script>
 <style >
     .filter{
-        width:290px;
-        height:208px;
-        padding:16px 16px 16px 16px;
+        width:50%;
+        height:calc(14 * 16px);
+        padding:16px 32px;
         box-shadow: var(--card);
         background:var(--grad);
     }

@@ -1,23 +1,36 @@
 <template>
-    <div class="LFOs">
-        <div class="LFO_head">
-            
-            
-            <div class="LFO_paint">paint</div>
-            <LfoGrid/>
-            <div class="LFO_curve">c</div>
-            <LfoSelect/>
-            
-
-        </div>
-        <div class="LFOs_box">
+    <div class="LFO">
+        
+        <div class="LFO_box">
 
             <div class="lfoMods">
                 <Button v-for="item in LFOs" :select="this.select_lfo" :active="item.active" :name="item.name"/>
             </div>
-            <div class="lfoControls">
+
+            <div >
+
+                <div class="viz_head">
+                    
+                        <div :style="{
+                            width:'15%',
+                            height:'100%',
+                            borderRight:'1px solid var(--viz-high-soft)'}"
+                        >p</div>
+                        <LfoGrid :style="{
+                            width:'25%',
+                            height:'100%',
+                            borderRight:'1px solid var(--viz-high-soft)',
+                            padding : '0px 5px'
+                            }" 
+                        />
+                        <div style="width:10%">c</div>
+                    
+                    <LfoSelect style="width:50%"/>
+
+                </div>
+
                 <LfoVisual />
-                
+
             </div>
         </div>
     </div>
@@ -59,51 +72,39 @@ export default {
 }
 </script>
 <style >
-    .LFOs{
-       padding:16px 32px 16px 16px;
+    .LFO{
+       padding:32px;
        border-bottom:1px solid rgba(0,0,0,0.2);
        box-shadow: var(--card);
        background:var(--grad);
     }
-    .LFO_head{
+    .LFO_box{
+        display:flex;
+        flex-direction:row;
+    }
+
+    .viz_head{
         width:100%;
         height:32px;
-        margin-bottom:16px;
-        margin-left:1px;
+        line-height:32px;
+        /* padding: 0 16px; */
         display:flex;
         flex-direction:row;
-        gap:16px;
-    }
-    .LFO_head > div{
-        /* outline:1px solid rgba(0,0,0,0.2); */
-        /* border-radius:3px; */
-    }
-
-    .LFO_paint{
-        width:96px;
-        
-        outline:1px solid rgba(0,0,0,0.2);
-    }
-    .LFO_curve{
-        width:32px;
-        outline:1px solid rgba(0,0,0,0.2);
-    }
-    .LFOs_box{
-        display:flex;
-        flex-direction:row;
+        align-items:center;
+        /* gap:16px; */
+        color:var(--viz-high);
+        background-color: var(--viz-back);
+        border-radius:5px 5px 0px 0;
+        border-bottom: 1px solid var(--viz-high-soft);
     }
     
+    
     .lfoMods{
-        width:80px;
-        
+        /* width:80px; */
+        margin-right:calc(2 * var(--graph-size));
         display:flex;
         flex-direction: column;
-        gap:16px;
+        gap:var(--graph-size);
     } 
 
-    .lfoControls{
-        width:480px;
-        /* margin-left:16px; */
-        /* border-bottom:1px solid red; */
-    }
 </style>

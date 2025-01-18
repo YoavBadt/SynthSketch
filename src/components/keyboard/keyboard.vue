@@ -29,7 +29,7 @@
 <script>
 import frequencies from './frequencies.js'
 import {store} from '../../store/store.js'
-import {Synth,start,getDestination} from "tone";
+// import {Synth,start,getDestination} from "tone";
 import { isProxy, toRaw } from 'vue';
 
 
@@ -37,7 +37,6 @@ import { isProxy, toRaw } from 'vue';
 export default {
     data(){
         return{
-            
             keys : [],
             octave : 2,
             key : {
@@ -187,7 +186,7 @@ export default {
                     pressed : false,
                     octave : this.octave+1,
                     index : i,
-                    frequency : frequencies[s][this.octave]
+                    frequency : frequencies[s][this.octave+1]
                 }
         )})    
                 
@@ -208,81 +207,5 @@ export default {
 
 }
 </script>
-<style >
-    .keyboard{
-        height:144px;
-        overflow:hidden;
-        position:relative;
-        display:flex;
-        flex-direction: row;
-        
-    }
-    .keyboard_controls{
-        height:100%;
-        width:128px;
-        border-right:1px solid rgba(0,0,0,0.2);
-    }
-    .keyboard_box{
-        width:672px;
-        height:100%;
-        background:#717171;
-        position:relative;
-    }
-    .flat_box{
-        width:100%;
-        height:100%;
-        position:relative;
-        display:flex;
-        flex-direction: row;
-        align-content: stretch;
-        
-    }
-   
-    .sharp_box{
-        position:absolute;
-        z-index:2;
-        width:100%;
-        display:flex;
-        flex-direction: row;
-        padding-left:32px;
-        
-        
-    }
-    .key_sharp{
-        width:32px;
-        height:80px;
-        color:rgba(255,255,255,0.25);
-        display:flex;
-        flex-direction: column-reverse;
-        padding-bottom:15px;
-        border-radius:0 0 5px 5px;
-        outline:1px solid rgba(0,0,0,0.2);
-        background:#201e1e; 
-        box-shadow: inset 0px -8px 0px 0px rgb(158, 158, 158,0.25),inset 0px -3px 4px 0px rgba(0, 0, 0, 0.8);
-    }
-    .key_press_sharp{
-        box-shadow: 0px 4px 0px 1px rgba(0,0,0,0.1);
-        background:linear-gradient(to bottom, rgb(22, 22, 22) 0px, #201e1e 25%);
-        padding-bottom:10px;
-    }
-
-    .key_flat{
-        height: 128px;
-        width: 48px;
-        color:rgba(0,0,0,0.5);
-        display:flex;
-        flex-direction: column-reverse;
-        padding-bottom:15px;
-        border-radius:0 0 5px 5px;
-        outline:1px solid rgba(0,0,0,0.2);
-        background:var(--grad),var(--back);
-        box-shadow: inset 0px -4px 0px 1px rgba(0,0,0,0.15);
-    }
-    .key_press_flat{
-        box-shadow: 0px 4px 0px 1px rgba(0,0,0,0.1);
-        background:linear-gradient(to bottom, var(--back-selected) 0px, var(--back) 25%);
-        padding-bottom:10px;
-    }
-    
-    
+<style>
 </style>

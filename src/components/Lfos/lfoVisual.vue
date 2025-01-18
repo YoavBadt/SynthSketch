@@ -407,7 +407,7 @@ export default {
 </script>
 <style>
     .lfoVisual{
-        border-radius:5px;
+        border-radius:0 0 5px 5px;
         overflow:visible;
         width:480px;
         height:224px;

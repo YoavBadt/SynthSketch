@@ -1,8 +1,5 @@
 import { reactive } from 'vue'
-import {el} from '@elemaudio/core'
-import WebRenderer from '@elemaudio/web-renderer'
-const ctx = new AudioContext();
-const core = new WebRenderer();
+
 
 export const store = reactive({
     
@@ -16,7 +13,7 @@ export const store = reactive({
         tune : 0
     },
     osc2 : {
-        type : 'sine',
+        type : 'triangle',
         level : 1,
         pan : 0,
         trans : 12,

@@ -1,7 +1,7 @@
 <template>
     <div class="envelopes">
-      <Title name="Envelope" width="180px"/>
-      <div class="env_box">
+      <!-- <Title name="Envelope" width="180px"/> -->
+      
 
         <div class="envMods">
           <Button v-for="item in envelopes" :select="this.select_env" :active="item.active" :name="item.name"/>
@@ -16,7 +16,7 @@
             </div>
         </div>
 
-      </div>
+      
     </div>
 </template>
 
@@ -82,24 +82,20 @@ export default {
 </script>
 <style>
 .envelopes{
-  height:320px;
+  /* height:320px; */
   /* display:flex; */
   /* flex-direction:row; */
   /* width:486px; */
   box-shadow: var(--card);
   background:var(--grad);
   border-bottom:1px solid rgba(0,0,0,0.2);
-}
-.env_box{
   display:flex;
   flex-direction:row;
-  /* gap:16px; */
+  padding:16px 32px;
+  gap:32px;
 }
+
 .envMods{
-  width:96px;
-  padding-left:16px;
-  padding-right:16px;
-  margin-top:16px;
   display:flex;
   flex-direction: column;
   /* justify-content: space-between; */

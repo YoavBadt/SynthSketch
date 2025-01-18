@@ -1,4 +1,5 @@
 import './assets/main.css'
+import './assets/graph.css'
 import Button from './components/button.vue'
 import Knob from './components/knob.vue'
 import Title from './components/title.vue'
