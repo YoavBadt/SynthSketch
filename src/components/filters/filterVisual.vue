@@ -48,7 +48,7 @@ export default {
             let w = this.width
             
             let cut = this.getStore.cutoff
-            cut = this.mapper(cut,-52,76,0,w)
+            cut = this.mapper(cut,0,100,0,w)
             
             let reso = this.getStore.resonance
 

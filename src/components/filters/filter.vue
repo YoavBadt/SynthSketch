@@ -15,20 +15,13 @@
     </div>
 </template>
 <script>
-import {store} from '../../store/store.js'
+
 import ResoSlider from './resoSlider.vue'
 import CutSlider from './cutSlider.vue'
 import FilterVisual from './filterVisual.vue'
 export default {
     components:{ResoSlider,FilterVisual,CutSlider},
-    data(){
-        return{
-            store
-        }
-    },
-    computed:{
-        
-    }
+  
 }
 </script>
 <style >

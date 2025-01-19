@@ -1,6 +1,6 @@
 <template >
     <div class="osc_select">
-        <template v-for="(n,i) in ['sine','square','triangle','sawtooth']">
+        <template v-for="(n,i) in waveTypes">
                 <input type="radio" :id="n+oscNum" :name="`waveform-${oscNum}`" :value="n" :checked="waveform === n" v-model="waveform" @change="upDateOsc(n)"/> 
                 <label class="osc_wave" :for="n+oscNum"
                     :style="{
@@ -31,6 +31,7 @@ export default {
     emits : [],
     data(){
         return {
+            waveTypes : ['sine','square','triangle','sawtooth'],
             waveform : '',
             wavePaths : ['M2.59,16.553C2.59,16.553 7.465,6.832 14.834,14.345C24.189,23.883 29.329,13.686 29.329,13.686','M2.463,19.5L2.585,8L15.957,8L16,19.5L29.429,19.5L29.5,8','M2.59,17L16,9.5L29,17.5','M3,20.5L3,8.5L29.329,21'],
             radius : ['5px 0 0 5px','0px','0px','0 5px 5px 0'],

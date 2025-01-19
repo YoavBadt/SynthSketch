@@ -31,6 +31,7 @@ export default {
             let min = store.filter1.cutMin
             let max = store.filter1.cutMax
             w = this.mapper(w,min,max,0,86)
+            
             return w //{width : w + '%'}
         }
     },
@@ -63,7 +64,7 @@ export default {
             }else if(w > max){
                 w = max
             }
-
+            
             let newFilter = store.filter1
             newFilter.cutoff = w
             store.updateFilter1({...newFilter})

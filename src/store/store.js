@@ -1,12 +1,12 @@
 import { reactive } from 'vue'
-
+import { changeCutOff,changeRezo } from '../audio/elementaryEngine.js'
 
 export const store = reactive({
     
     keyPlay : '',
     synth : null,
     osc1 : {
-        type : 'sine',
+        type : 'square',
         level : 0.5,
         pan : 0,
         trans : 12,
@@ -20,11 +20,11 @@ export const store = reactive({
         tune : 0
     },
     filter1 : {
-        type : "highpass",
-        cutoff : 15,
-        cutMin: -52,
-        cutMax:72,
-        resonance : 50,
+        type : "allpas",
+        cutoff : 50,
+        cutMin: 0,
+        cutMax:100,
+        resonance : 100,
         resMin: 0,
         resMax: 100
     },
@@ -45,7 +45,7 @@ export const store = reactive({
               },
               attack: {
                 name:'attack',
-                value : 1,
+                value : 0.01,
                 curve :50,
                 minmax : { min: 0,max: 2},
                 step: 0.01,
@@ -54,7 +54,7 @@ export const store = reactive({
               },
               decay : {
                 name:'decay',
-                value : 0.5,
+                value : 0.25,
                 curve :50,
                 minmax : { min: 0,max: 2},
                 step: 0.01,
@@ -63,7 +63,7 @@ export const store = reactive({
               },  
               sustain:{
                 name:'sustain',
-                value :0.5,
+                value :0.15,
                 minmax : { min: 0,max: 1},
                 curve: false,
                 step: 0.01,
@@ -141,6 +141,8 @@ export const store = reactive({
     },
     updateFilter1(payload){
         this.Filter1 = payload
+        changeCutOff(payload.cutoff) 
+        changeRezo(payload.resonance)
     }
 
 })

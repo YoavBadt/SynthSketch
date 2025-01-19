@@ -10,9 +10,9 @@
                 
                 @mouseup="keyState(myKey,'up')"
 
+                @mouseleave="keyState(myKey,'leave')"
                 @mouseenter="keyState(myKey,'enter')"
                 
-                @mouseleave="keyState(myKey,'leave')"
                 >
                     <span>{{myKey.name}}{{ myKey.octave }}</span>
                 </div>
@@ -29,7 +29,7 @@ export default {
     data(){
         return{
             keys : [],
-            octave : 3,
+            octave : 4,
             mouseDown : false,
             glyphDown : []
         }
@@ -37,7 +37,7 @@ export default {
     methods:{
         keyState(myKey,action){
             let myNoteEvent
-            
+
             switch(action){
                 case 'down' : 
                     myKey.pressed = true
