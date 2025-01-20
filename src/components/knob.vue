@@ -1,9 +1,9 @@
 <template>
     <div class="knob_box" v-if="show"
+        @mousedown.prevent="drag=true"
         @mousemove="drag ? startDrag($event) : null"
         @mouseup="drag = false"
-        @mousedown.prevent="drag=true"
-        @mouseleave="drag=false"
+        @mouseenter="drag = globalMouse"
     >
         <div class="knob">
             <svg id="svg" class="KnobSvg" :width="width" :height="width"  >
@@ -43,6 +43,8 @@
     </div>
 </template>
 <script>
+import {store} from '../store/store.js'
+
 export default {
     props: ['modelValue','name','min','max','step','show','soft'],
     emits: ['update:modelValue'],
@@ -54,7 +56,8 @@ export default {
             p : null,
             stroke : 8,
             val : 6.283111111111111,
-            drag :false
+            drag :false,
+            globalMouse : store.globalMouseDown
         }
     },
     methods:{
@@ -62,6 +65,7 @@ export default {
             return (value - x1) * (y2 - x2) / (y1 - x1) + x2;
         },
         startDrag(event){
+            
             
             let num = event.movementY * this.soft * this.step 
             let newVal2 = this.modelValue - num
@@ -72,11 +76,11 @@ export default {
            
             if(newVal2 >= this.max){
                 return
-            }else if(newVal2 < 0.01 && newVal2 < this.modelValue){
-                this.name === 'Sustain' ? newVal2 = 0 : newVal2 = 0.01
-                this.$emit('update:modelValue',newVal2)
+            }else if(newVal2 < 0.0001 && newVal2 < this.modelValue){
+                this.name === 'Sustain' ? newVal2 = 0 : newVal2 = 0.001
+                this.$emit('update:modelValue',this.name,newVal2)
             }else{
-                this.$emit('update:modelValue',newVal2)
+                this.$emit('update:modelValue',this.name,newVal2)
 
             }
             
@@ -93,13 +97,6 @@ export default {
             let deg = this.mapper(this.modelValue*100,this.min*100,this.max*100,20,340)
             return deg
         }
-    },
-    updated(){
-        
-    },
-    created(){
-        
-       
     }
 }
 </script>

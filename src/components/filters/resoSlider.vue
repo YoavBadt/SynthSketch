@@ -66,9 +66,8 @@ export default {
             }
 
 
-            let newFilter = store.filter1
-            newFilter.resonance = h
-            store.updateFilter1({...newFilter})
+            
+            store.updateFilter1(h,'resonance')
         },
         mapper(value, x1, y1, x2, y2){
             return (value - x1) * (y2 - x2) / (y1 - x1) + x2;

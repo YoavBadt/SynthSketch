@@ -12,7 +12,9 @@
             <EnvVisual2 />
             
             <div class="knobs">
-              <Knob v-for="item in getEnv.adsr" v-model.number="item.value" :soft="item.soft" :show="item.show" :name="item.name" :min="item.minmax.min" :max="item.minmax.max" :step="item.step"/>
+              
+                <Knob  v-for="item in adsr" :modelValue="item.value" @update:modelValue="updateStore" :soft="item.soft" :show="item.show" :name="item.name" :min="item.minmax.min" :max="item.minmax.max" :step="item.step"/>
+              
             </div>
         </div>
 
@@ -28,9 +30,10 @@ import {store} from '../../store/store.js'
 export default {
     components:{ModBox,EnvVisual2},
     props:['env1'],
-    emits:['update:env1'],
+   
   data(){
     return{
+      adsr : store.env1.adsr,
       envelopes:[
         {
           name: 'env 1',
@@ -54,30 +57,21 @@ export default {
   },
   computed:{
     getEnv(){
-      return store.env1
+      return store.env1.adsr
     }
   },
   methods:{
     select_env(name){
       this.envelopes.forEach((e)=> {e.name === name ? e.active = true : e.active = false})
+    },
+    updateStore(name,value){
+      
+      // let adsr = Object.assign( {}, store.env1.adsr ) 
+      
+      store.updateEnv1(name,value)
     }
   },
-  watch:{
-    faders:{
-      handler(){
-          let adsr = {
-            attack:this.faders.attack.value,
-            decay:this.faders.decay.value,
-            sustain:this.faders.sustain.value,
-            release:this.faders.release.value
-          }
-        // this.$emit('update:env1',adsr)
-        store.updateEnv1(adsr)
-      },
-      deep:true
-      
-    }
-  }
+  
 }
 </script>
 <style>

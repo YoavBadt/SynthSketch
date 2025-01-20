@@ -26,7 +26,7 @@ export default {
         return{
             width: 224,
             height: 128,
-            reso : null
+            reso : null,
         }
     },
     methods:{

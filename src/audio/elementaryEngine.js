@@ -20,49 +20,28 @@ let voices = [
 ];
 
 
-export async function initializeEngine() {
+// export async function initializeEngine() {
 
-    if (!ctx || !core) {
-        ctx = new AudioContext();
-        core = new WebRenderer();
+//     if (!ctx || !core) {
+//         ctx = new AudioContext();
+//         core = new WebRenderer();
 
-        const node = await core.initialize(ctx, {
-            numberOfInputs: 0,
-            numberOfOutputs: 1,
-            outputChannelCount: [2],
-        })
+//         const node = await core.initialize(ctx, {
+//             numberOfInputs: 0,
+//             numberOfOutputs: 1,
+//             outputChannelCount: [2],
+//         })
 
-        node.connect(ctx.destination);
+//         node.connect(ctx.destination);
 
-        console.log("Audio system initialized!");
+//         console.log("Audio system initialized!");
 
-        createRefs()
-        render(voices)
-    }
-}
+//         createRefs()
+//         render(voices)
+//     }
+// }
 
-function createRefs(){
-    let freq = mapper(store.filter1.cutoff,0,100,20,20000);
-    let rez = store.filter1.resonance / 10;
-
-    [cutoffRef, setCutoffFreqRef] = core.createRef("const", {value: freq}, []);
-
-    [rezoRef,setRezoRef] = core.createRef("const", {value: rez}, [])
-
-}   
-export function changeCutOff(newValue){
-    let newCutoff = mapper(newValue,0,100,20,10000);
-    
-    setCutoffFreqRef({value: newCutoff})
-    cutoffRef.props.value = newCutoff
-    
-}
-export function changeRezo(newValue){
-    let newRezo = newValue / 10;
-    setRezoRef({value: newRezo})
-    rezoRef.props.value = newRezo
-}
-
+  
 
 
 export function noteEvent(event,frequency,note,octave){
@@ -96,39 +75,35 @@ function synthVoice(voice) {
 
     let gate = el.const({ key: `${voice.key}:gate`, value: voice.gate })
     let freq = el.const({ key: `${voice.key}:freq`, value: voice.freq })
-    let filtered = getFilter( el.mul(getENV(gate),getOsc(freq)) )
+    // let filtered = getFilter( el.mul(getENV(gate),getOsc(freq)) )
     
-    // return el.mul(
-    //     getENV(gate),
-    //     getOsc(freq),
-    //   )
+    return el.mul(
+        getENV(gate,store.env1.adsr),
+        getOsc(freq,store.osc1.type),
+      )
 
-    return filtered
+    // return filtered
   }
 
 
 function render(voices){
     
     
-    core.render( el.add( ...voices.map( (voice) => synthVoice(voice) )) )
+    store.init.core.render( el.add( ...voices.map( (voice) => synthVoice(voice) )) )
 }
 
-function getOsc(freq){
-    let osc1 = store.osc1.type
-    const resetSignal = el.train(1);
+export function getOsc(freq,osc){
+    // const resetSignal = el.train(1);
     let oscReturn
     
-    switch (osc1){
+    switch (osc){
         case 'sine': 
-            
             oscReturn =  el.cycle(freq)
             break;
         case 'square':
-            // oscReturn = el.phasor(freq)
             oscReturn =  el.blepsquare(freq)
             break;
         case 'triangle': 
-            // oscReturn = el.phasor(freq)
             oscReturn =  el.bleptriangle(freq)
             break;
         case 'sawtooth': 
@@ -141,33 +116,7 @@ function getOsc(freq){
     return oscReturn
 }
 
-function getENV(gate){
-    let a = store.env1.adsr.attack.value
-    let d = store.env1.adsr.decay.value
-    let s = store.env1.adsr.sustain.value
-    let r = store.env1.adsr.release.value
 
-    // return el.smooth(
-    //     el.select(
-    //         gate, //acording to wether this is 1 or 0
-    //         el.tau2pole(0.1), //if its 1, go to 1 over 0.1 seconds
-    //         el.tau2pole(0.8) // if its 0, got to 0 over 0.8 seconds
-    //     ),
-    //     gate
-    // )
-
-    return el.adsr(a,d,s,r,gate)
-}
-
-function getFilter(signal){
-    let mode = store.filter1.type
-    
-
-    let filtered = el.svf( {mode : mode}, cutoffRef, rezoRef, signal) 
-    
-    return filtered
-
-}
 
 function noteToFreq(note,octave){
     

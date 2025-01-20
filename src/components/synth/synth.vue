@@ -5,7 +5,7 @@
         
       </div>
       <div class="topbar ">
-        <button class="graph-w-8"  @click="init">init</button>
+        <!-- <button class="graph-w-8"  @click="init">init</button> -->
       </div>
       
       <div class="row2">
@@ -37,7 +37,6 @@
 </template>
 
 <script>
-import { initializeEngine } from '../../audio/elementaryEngine.js';
 import {store}    from '../../store/store.js'
 import Envelopes  from '../../components/envelopes/envelopes.vue'
 import Lfo        from '../../components/lfos/lfo.vue'
@@ -47,7 +46,6 @@ import Keyboard   from '../../components/keyboard/keyboard.vue'
 import Keyboard2   from '../../components/keyboard/keyboard2.vue'
 import Trial      from '../../components/trial/trial.vue'
 
-// import {Synth,start} from "tone";
 
 export default{
   components:{

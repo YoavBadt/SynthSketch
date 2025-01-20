@@ -65,9 +65,8 @@ export default {
                 w = max
             }
             
-            let newFilter = store.filter1
-            newFilter.cutoff = w
-            store.updateFilter1({...newFilter})
+            
+            store.updateFilter1(w,'cutoff')
         },
         mapper(value, x1, y1, x2, y2){
             return (value - x1) * (y2 - x2) / (y1 - x1) + x2;

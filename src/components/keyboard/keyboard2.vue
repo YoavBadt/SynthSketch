@@ -23,15 +23,15 @@
 <script>
 import frequencies from './frequencies.js'
 import { noteEvent } from '../../audio/elementaryEngine.js';
-
+import { store } from '../../store/store.js'
 
 export default {
     data(){
         return{
             keys : [],
             octave : 4,
-            mouseDown : false,
-            glyphDown : []
+            glyphDown : [],
+            mouseDown : store.globalMouseDown
         }
     },
     methods:{
@@ -42,25 +42,26 @@ export default {
                 case 'down' : 
                     myKey.pressed = true
                     myNoteEvent = 'noteOn'
+                    
                     break;
                 case 'up' : 
                     myKey.pressed = false
                     myNoteEvent = 'noteOff'
+                    
                     break;
                 case 'leave' : 
-                    this.mouseDown ? myKey.pressed = false : null
-                    this.mouseDown ? myNoteEvent = 'noteOff' :  null
+                    store.globalMouseDown ? myKey.pressed = false : null
+                    store.globalMouseDown ? myNoteEvent = 'noteOff' :  null
                     break;
                 case 'enter' : 
-                    this.mouseDown ? myKey.pressed = true : null
-                    this.mouseDown ? myNoteEvent = 'noteOn' :  null
+                    store.globalMouseDown ? myKey.pressed = true : null
+                    store.globalMouseDown ? myNoteEvent = 'noteOn' :  null
                     break;
                 default:
                     break;
             }
            
-            myNoteEvent ? noteEvent(myNoteEvent ,myKey.frequency,myKey.name,myKey.octave) : null
-
+            myNoteEvent ? store.noteEvent(myNoteEvent ,myKey.frequency,myKey.name,myKey.octave) : null
         },
         getFixed(i){
             
@@ -91,7 +92,7 @@ export default {
             if(myKey && this.glyphDown.includes(event.key) == false ){
                 this.glyphDown.push(event.key)
                 myKey.pressed = true
-                noteEvent( 'noteOn',myKey.frequency, myKey.name,myKey.octave)
+                store.noteEvent( 'noteOn',myKey.frequency, myKey.name,myKey.octave)
             }
         },
         handleKeyup(event){
@@ -101,7 +102,7 @@ export default {
             if(myKey){
                 this.glyphDown = this.glyphDown.filter((e)=>e !== event.key)
                 myKey.pressed = false
-                noteEvent( 'noteOff',myKey.frequency, myKey.name,myKey.octave)
+                store.noteEvent( 'noteOff',myKey.frequency, myKey.name,myKey.octave)
             }
         },
         handleMouseUp(){
@@ -158,14 +159,14 @@ export default {
     mounted(){
         window.addEventListener("keydown", this.handleKeydown);
         window.addEventListener("keyup", this.handleKeyup);
-        window.addEventListener("mouseup",this.handleMouseUp);
-        window.addEventListener("mousedown",this.handleMouseDown);
+        // window.addEventListener("mouseup",this.handleMouseUp);
+        // window.addEventListener("mousedown",this.handleMouseDown);
     },
     beforeUnmount() {
         window.removeEventListener("keydown", this.handleKeydown);
         window.removeEventListener("keyup", this.handleKeyup);
-        window.removeEventListener("mouseup",this.handleMouseUp);
-        window.removeEventListener("mousedown",this.handleMouseDown);
+        // window.removeEventListener("mouseup",this.handleMouseUp);
+        // window.removeEventListener("mousedown",this.handleMouseDown);
   },
 }
 </script>

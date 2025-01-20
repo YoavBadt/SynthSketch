@@ -1,7 +1,7 @@
 <template >
     <div class="oscilator">
             <div class="osc_knobs">
-                <Title :name="name" width="100%" style="margin-bottom : 16px"/>
+                <Title :name="name" width="100%" style="margin-bottom : 16px" />
                 <!-- <div class="viz_head" >{{ name }}</div> -->
                 <div class="osc_digits_box">
                     <div class="osc_digits" style="border-right:1px solid rgba(62, 174, 243,1)">
@@ -15,8 +15,8 @@
                 </div>
                 <div class="osc_knobs_box">
                     
-                    <Knob  v-model.number="stateOsc.level" show="true" name="level" min="0" max="1" step="0.01" soft="2"/>
-                    <Knob  v-model.number="stateOsc.pan" show="true" name="pan" min="0" max="1" step="0.01" soft="2"/>
+                    <Knob  :modelValue="stateOsc.level" @update:modelValue="updateStore" show="true" name="level" min="0" max="1" step="0.01" soft="2"/>
+                    <Knob  :modelValue="stateOsc.pan" @update:modelValue="updateStore" show="true" name="pan" min="0" max="1" step="0.01" soft="2"/>
                 </div>
 
             </div>
@@ -29,7 +29,7 @@
             </div>
 
             <!-- <div>
-                <Voices />
+                <OscVoices />
             </div> -->
             
 
@@ -41,11 +41,11 @@
 import {store} from '../../store/store.js'
 import OscSelect from './oscSelect.vue'
 import OscVisual from './oscVisual.vue'
-import Voices from './voices.vue'
+import OscVoices from './oscVoices.vue'
 
 export default {
     props:['name','oscNum'],
-    components:{OscSelect,OscVisual,Voices},
+    components:{OscSelect,OscVisual,OscVoices},
     data(){
         return {
             osc : {
@@ -65,6 +65,11 @@ export default {
             }else{
                 return store.osc2
             } 
+        }
+    },
+    methods:{
+        updateStore(name,value){
+            store.updateOsc1(name,value)
         }
     },
     watch: {
