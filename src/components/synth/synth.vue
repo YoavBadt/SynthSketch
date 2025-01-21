@@ -14,12 +14,12 @@
         
         <!-- <div class="macros"></div> -->
              
-        <Osc name="Oscilator 1" oscNum="1"/>
-        <Osc name="Oscilator 2" oscNum="2"/>
+        <Osc v-for="(oscilator,i) in store.oscilators" :name="oscilator.name" :oscNum="i"/>
+        
             
         <div class="filters">
-          <Filter name="filter 1" />
-          <Filter name="filter 2" />
+          <Filter v-for="filter in store.filters" :name="filter.name" />
+          
         </div>
       </div>
         <div class="right">
@@ -90,13 +90,12 @@ export default{
     border-radius:8px;
     
     background: var(--back);
-    /* background:#4a5c70; */
     
     /* lines */
-    background-size: var(--grid-size) var(--grid-size);
-    /* background-image:
-    linear-gradient(to bottom, var(--grid) 1px, transparent 1px),
-    linear-gradient(to right, var(--grid) 1px, transparent 1px); */
+    background-size: var(--graph-size) var(--graph-size);
+    background-image:
+    linear-gradient(to bottom, var(--graph) 1px, transparent 1px),
+    linear-gradient(to right, var(--graph) 1px, transparent 1px);
     
     box-shadow: 5px 15px 20px 2px rgba(0,0,0,0.25),inset 2px 2px 3px 1px rgba(255,255,255,0.2);
   }
@@ -113,11 +112,13 @@ export default{
     width:100%;
     height:calc(40 * 16px);
     border-bottom:1px solid rgba(0,0,0,0.2);
-    display:flex;
-    flex-direction: row;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    /* display:flex; */
+    /* flex-direction: row; */
   }
   .left{
-    width: calc(36 * 16px);
+    width: calc(36 * var(--grid-size));
     height: 100%;
     border-right:1px solid rgba(0,0,0,0.2);
   }
@@ -133,8 +134,8 @@ export default{
   
   .filters{
     width:100%;
-    display:flex;
-    flex-direction: row;
+    display:grid;
+    grid-template-columns: 1fr 1fr;
     /* gap:16px;  */
     /* border-bottom:1px solid rgba(0,0,0,0.2) */
   }

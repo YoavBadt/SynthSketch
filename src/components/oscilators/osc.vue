@@ -15,16 +15,17 @@
                 </div>
                 <div class="osc_knobs_box">
                     
-                    <Knob  :modelValue="stateOsc.level" @update:modelValue="updateStore" show="true" name="level" min="0" max="1" step="0.01" soft="2"/>
-                    <Knob  :modelValue="stateOsc.pan" @update:modelValue="updateStore" show="true" name="pan" min="0" max="1" step="0.01" soft="2"/>
+                    <Knob  :modelValue="osc.level" @update:modelValue="updateStore" show="true" name="level" min="0" max="1" step="0.01" soft="2"/>
+                    <Knob  :modelValue="osc.pan" @update:modelValue="updateStore" show="true" name="pan" min="0" max="1" step="0.01" soft="2"/>
                 </div>
 
             </div>
 
             <div class="osc_middle">
                 
-                <OscVisual :oscType="stateOsc.type"/>
-                <OscSelect :oscNum="oscNum"/>
+                <OscVisual :oscMode="osc.mode"/>
+
+                <OscSelect :oscNum="oscNum" :mode="osc.mode" @update:mode="updateStore"/>
                 
             </div>
 
@@ -48,45 +49,25 @@ export default {
     components:{OscSelect,OscVisual,OscVoices},
     data(){
         return {
-            osc : {
-                type : 'sine',
-                level :null,
-                pan : null,
-                trans : null,
-                tune : null
-            }
+            osc : store.oscilators[this.name]
             
         }
     },
     computed:{
         stateOsc(){
             if(this.oscNum == 1){
-                return store.osc1 
+                // return store.osc1 
             }else{
-                return store.osc2
+                // return store.osc2
             } 
         }
     },
     methods:{
         updateStore(name,value){
-            store.updateOsc1(name,value)
+            store.updateOsc(this.name,name,value)
         }
-    },
-    watch: {
-        stateOsc(oldStateOsc,newStateOsc){
-        // this.osc = {...newStateOsc}
-       },
-       osc : {
-        handler(oldLocalOsc,newLocalOsc){
-            // store.updateOsc1({...newLocalOsc})
-        },
-        deep:true
-       } 
-    },
-    created(){
-        // this.osc = {...store.osc1}
-        
     }
+    
 }
 </script>
 <style >

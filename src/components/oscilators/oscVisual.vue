@@ -6,10 +6,10 @@
 
             <g stroke-linecap="round" stroke-linejoin="round" fill="rgba(62, 174, 243,0.25)" stroke="rgba(62, 174, 243,1)" stroke-width="2">
 
-                <path v-if="oscType === 'sawtooth'" :d="`M${0},${height/2}L${0},${height/4}L${width},${height*0.75}L${width},${height/2}`" />
-                <path v-if="oscType === 'sine'" :d="getSine"/>
-                <path v-if="oscType === 'triangle'" :d="`M${0},${height/2}L${width/4},${height/4}L${width*0.75},${height*0.75}L${width},${height/2}`" />
-                <path v-if="oscType === 'square'" :d="`M${0},${height/2}L${0},${height/4}L${width/2},${height/4}L${width/2},${height*0.75}L${width},${height*0.75}L${width},${height/2}`" />
+                <path v-if="oscMode === 'sawtooth'" :d="`M${0},${height/2}L${0},${height/4}L${width},${height*0.75}L${width},${height/2}`" />
+                <path v-if="oscMode === 'sine'" :d="getSine"/>
+                <path v-if="oscMode === 'triangle'" :d="`M${0},${height/2}L${width/4},${height/4}L${width*0.75},${height*0.75}L${width},${height/2}`" />
+                <path v-if="oscMode === 'square'" :d="`M${0},${height/2}L${0},${height/4}L${width/2},${height/4}L${width/2},${height*0.75}L${width},${height*0.75}L${width},${height/2}`" />
             </g>
 
         </svg>
@@ -17,7 +17,7 @@
 </template>
 <script>
 export default {
-    props:['oscType'],
+    props:['oscMode'],
     data(){
         return{
             width:176,

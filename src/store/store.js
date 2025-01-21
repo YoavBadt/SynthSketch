@@ -9,6 +9,8 @@ export const store = reactive({
     
     keyPlay : '',
     globalMouseDown : false,
+    
+    gridSize : 16,
     init : {
         core : null,
         ctx : null,
@@ -18,48 +20,82 @@ export const store = reactive({
         NUM_VOICES : 3,
         voices : {
             state : [],
-            activeVoices : []
+            activeVoices : {},
+            currentVoice : 0
         }
           
         
     },
-    osc1 : {
-        type : 'square',
-        level : 0.5,
-        levelRef : null,
-        setLevelRef : null,
-        pan : 0,
-        panRef : null,
-        setPanRef : null,
-        trans : 12,
-        tune : 0
+    oscilators : {  
+        osc1 : {
+            name : 'osc1',
+            mode : 'square',
+            level : 0.5,
+            levelRef : null,
+            setLevelRef : null,
+            pan : 0.5,
+            panRef : null,
+            setPanRef : null,
+            trans : 12,
+            tune : 0
+        },
+        osc2 : {
+            name : 'osc2',
+            mode : 'triangle',
+            level : 0.5,
+            levelRef : null,
+            setLevelRef : null,
+            pan : 0.5,
+            panRef : null,
+            setPanRef : null,
+            trans : 12,
+            tune : 0
+        }
     },
-    osc2 : {
-        type : 'triangle',
-        level : 1,
-        pan : 0,
-        trans : 12,
-        tune : 0
+    filters: {
+        filter1 : {
+            name : 'filter1',
+            mode : "lowpass",
+            modeRef:null,
+            setModeRef : null,
+            cutoff : 50,
+            cutRef : null,
+            setCutRef : null,
+            cutMin: 0,
+            cutMax:100,
+            resonance : 70,
+            rezRef: null,
+            setRezRef:null,
+            resMin: 0,
+            resMax: 100,
+            mix : 0,
+            mixMin : 0,
+            mixMax: 100,
+            mixRef : null,
+            setMixRef : null
+        },
+        filter2 : {
+            name : 'filter2',
+            mode : "highpass",
+            modeRef:null,
+            setModeRef : null,
+            cutoff : 20,
+            cutRef : null,
+            setCutRef : null,
+            cutMin: 0,
+            cutMax:100,
+            resonance : 100,
+            rezRef: null,
+            setRezRef:null,
+            resMin: 0,
+            resMax: 100,
+            mix : 0,
+            mixMin : 0,
+            mixMax: 100,
+            mixRef : null,
+            setMixRef : null
+        },
     },
-    filter1 : {
-        mode : "lowpass",
-        modeRef:null,
-        setModeRef : null,
-        cutoff : 50,
-        cutRef : null,
-        setCutRef : null,
-        cutMin: 0,
-        cutMax:100,
-        resonance : 100,
-        rezRef: null,
-        setRezRef:null,
-        resMin: 0,
-        resMax: 100,
-        mix : 100,
-        mixRef : null,
-        setMixRef : null
-    },
-    filter2 :{},
     keyboard : {
         octave : null,
         keyPlay : null,
@@ -166,8 +202,10 @@ export const store = reactive({
         
         if(event.type === 'mousedown'){
             this.globalMouseDown = true
+            
         }else if( event.type === 'mouseup'){
             this.globalMouseDown = false
+            
         } 
         
     },
@@ -198,7 +236,7 @@ export const store = reactive({
 
     },
     synthSetup(){
-        let numVoices = 3
+        let numVoices = 5
         for(let i = 0;i < numVoices;i++){
             let [gateRef, setGateRef] = this.init.core.createRef("const", {value: 0}, [])
             let [freqRef, setFreqRef] = this.init.core.createRef("const", {value: 440}, [])
@@ -207,13 +245,28 @@ export const store = reactive({
                     gate: gateRef,
                     setGateRef : setGateRef, 
                     freq: freqRef,
-                    note: null,
                     setFreqRef : setFreqRef, 
+                    note: null,
                     tc: 0.5,
                     key: `v${i+1}`
                 })
             
         }
+
+        //oscilators
+        Object.keys(this.oscilators).forEach((n)=>{
+
+            let newPan = mapper(this.oscilators[n].pan,0,1,-1,1)
+
+            let [levelRef, setLevelRef] = this.init.core.createRef("const", {value: this.oscilators[n].level}, [])
+            let [panRef, setPanRef] = this.init.core.createRef("const", {value: newPan}, []) 
+            this.oscilators[n].levelRef = levelRef
+            this.oscilators[n].setLevelRef = setLevelRef
+            this.oscilators[n].panRef = panRef
+            this.oscilators[n].setPanRef = setPanRef      
+        })
+
+
 
         //setsup refs for only the first envelope!
         Object.keys(this.env1.adsr).forEach((n)=> {
@@ -223,50 +276,125 @@ export const store = reactive({
           
           });
         
-        //sets up refs for both filters but theres is no setter functions for the second one!
+        //filters setup
         for(let i=1;i<3;i++){
-            let [modeRef, setModeRef] = this.init.core.createRef("const", {value: this.filter1.mode}, [])  
-            this['filter'+i].modeRef = modeRef
-            this['filter'+i].setModeRef = setModeRef  
+            let [modeRef, setModeRef] = this.init.core.createRef("const", {value: this.filters['filter'+i].mode}, [])  
+            this.filters['filter'+i].modeRef = modeRef
+            this.filters['filter'+i].setModeRef = setModeRef  
 
-            let initCutoff = mapper(this.filter1.cutoff,0,100,20,10000);
+            let initCutoff = mapper(this.filters['filter'+i].cutoff,0,100,20,10000); //this is needs to be investigates!!!
+
             let [cutRef, setCutRef] = this.init.core.createRef("const", {value: initCutoff}, [])  
-            this['filter'+i].cutRef = cutRef
-            this['filter'+i].setCutRef = setCutRef
+            this.filters['filter'+i].cutRef = cutRef
+            this.filters['filter'+i].setCutRef = setCutRef
             
-            let initRezo = this.filter1.resonance / 10;
+            let initRezo = this.filters['filter'+i].resonance / 10; //so does this!!!
+
             let [rezRef, setRezRef] = this.init.core.createRef("const", {value: initRezo}, [])  
-            this['filter'+i].rezRef = rezRef
-            this['filter'+i].setRezRef = setRezRef 
+            this.filters['filter'+i].rezRef = rezRef
+            this.filters['filter'+i].setRezRef = setRezRef 
+
+            let initMix = this.filters['filter'+i].mix / 100
+            let [mixRef, setMixRef] = this.init.core.createRef("const", {value: initMix}, [])  
+            this.filters['filter'+i].mixRef = mixRef
+            this.filters['filter'+i].setMixRef = setMixRef   
         }  
         
         
         this.render()
-        this.init.setup = true
+        this.init.setup ? this.init.setup++ : this.init.setup = 1
     },
     render(){
-        this.init.core.render( el.add( ...this.synth.voices.state.map( (voice) => this.synthVoice(voice) )) )
+
+        let myrender = this.synth.voices.state.map( (voice) => this.synthVoice(voice) )
+
+        // this.init.core.render(
+        //     this.synthVoice(this.synth.voices.state[0]).left,
+        //     this.synthVoice(this.synth.voices.state[0]).right
+        // )
+
+        this.init.core.render( 
+            el.add( ...this.synth.voices.state.map( (voice) => this.synthVoice(voice).left ) ),
+            el.add( ...this.synth.voices.state.map( (voice) => this.synthVoice(voice).right ) ) 
+            
+        )
     },
     synthVoice(voice){
 
             // let gate = el.const({ key: `${voice.key}:gate`, value: voice.gate })
             // let freq = el.const({ key: `${voice.key}:freq`, value: voice.freq })
             
-            let mode = store.filter1.mode
-            let cutoffRef = store.filter1.cutRef
-            let rezoRef = store.filter1.rezRef
 
             let a = this.env1.adsr.attack.ref
             let d = this.env1.adsr.decay.ref
             let s = this.env1.adsr.sustain.ref
             let r = this.env1.adsr.release.ref
             
-            let signal =  el.mul(
+            let Osc1_signal =  el.mul(
                 el.adsr(a,d,s,r,voice.gate),
-                getOsc(voice.freq,this.osc1.type),
+                getOsc(voice.freq,this.oscilators.osc1.mode),
               ) 
+            
+            let levelRef1 = this.oscilators.osc1.levelRef
+            let panRef1 = this.oscilators.osc1.panRef
 
-            let filtered = el.svf( {mode : mode}, cutoffRef, rezoRef, signal);
+            let osc1_stereo = { 
+                left:   el.mul( el.sub(1,panRef1 ) , el.mul( el.div(levelRef1,2), Osc1_signal)  ), 
+                right:  el.mul( el.add(1,panRef1 ) , el.mul( el.div(levelRef1,2), Osc1_signal)  )
+            }
+
+            //oscilator 2
+            let Osc2_signal = el.mul(
+                el.adsr(a,d,s,r,voice.gate),
+                getOsc(voice.freq,this.oscilators.osc2.mode),
+            ) 
+
+            let levelRef2 = this.oscilators.osc2.levelRef
+            let panRef2 = this.oscilators.osc2.panRef
+
+            let osc2_stereo = { 
+                left:   el.mul( el.sub(1,panRef2 ) , el.mul( el.div(levelRef2,2), Osc2_signal)  ), 
+                right:  el.mul( el.add(1,panRef2) , el.mul( el.div(levelRef2,2), Osc2_signal)  )
+            }
+
+            let signal = {
+                left:  el.div( el.add(osc1_stereo.left, osc2_stereo.left),2) ,
+                right: el.div( el.add(osc1_stereo.right, osc2_stereo.right),2)
+            }
+            
+
+            let mode1      = this.filters.filter1.mode
+            let cutoffRef1 = this.filters.filter1.cutRef
+            let rezoRef1   = this.filters.filter1.rezRef
+            let mixRef1    = this.filters.filter1.mixRef
+
+            let filterSignal1 =  {
+                left: el.svf( {mode : mode1}, cutoffRef1, rezoRef1, signal.left) ,
+                right: el.svf( {mode : mode1}, cutoffRef1, rezoRef1, signal.right)
+            }
+               
+            let mixed1 = {
+                left:   el.add(el.mul(el.sub(1, mixRef1), signal.left),el.mul(mixRef1, filterSignal1.left)) ,    
+                right : el.add(el.mul(el.sub(1, mixRef1), signal.right),el.mul(mixRef1, filterSignal1.right))
+            }
+            
+
+            let mode2      = this.filters.filter2.mode
+            let cutoffRef2 = this.filters.filter2.cutRef
+            let rezoRef2   = this.filters.filter2.rezRef
+            let mixRef2    = this.filters.filter2.mixRef
+
+            let filterSignal2 = {
+                left: el.svf( {mode : mode2}, cutoffRef2, rezoRef2, signal.left),
+                right: el.svf( {mode : mode2}, cutoffRef2, rezoRef2, signal.right)
+            }
+            
+
+            let mixed2 = {
+                left: el.add(el.mul(el.sub(1, mixRef2), signal.left),el.mul(mixRef2, filterSignal2.left)),
+                right: el.add(el.mul(el.sub(1, mixRef2), signal.right),el.mul(mixRef2, filterSignal2.right))
+            }
+            
 
 
             // let filtered = getFilter( el.mul(
@@ -274,10 +402,14 @@ export const store = reactive({
             //     getOsc(voice.freq,this.osc1.type)
             //     ) 
             // )
-            
+
+            let bothMixed = {
+                left: el.add(mixed1.left,mixed2.left),
+                right: el.add(mixed1.right,mixed2.right)
+            }
             
         
-            return filtered
+            return bothMixed
           
     },
     noteEvent(event,frequency,note,octave){
@@ -285,27 +417,56 @@ export const store = reactive({
 
             if(event === 'noteOn'){
 
-                this.synth.voices.state[0].setFreqRef({value: frequency})
-                this.synth.voices.state[0].setGateRef({value: 1})
-                this.synth.voices.state[0].note = note
+
+                if(this.synth.voices.currentVoice < this.synth.voices.state.length){
+
+                    let currentvoice = this.synth.voices.state[this.synth.voices.currentVoice]
+                    currentvoice.setFreqRef({value: frequency})
+                    currentvoice.setGateRef({value: 1})
+                    currentvoice.note = note
+
+                    this.synth.voices.activeVoices[note] = currentvoice
+
+                    this.synth.voices.currentVoice += 1
+                }
+                
             }else if(event === 'noteOff'){
-                this.synth.voices.state[0].setGateRef({value: 0})
+                
+                if(Object.keys(this.synth.voices.activeVoices).includes(note)){
+                    let currentvoice = this.synth.voices.activeVoices[note]
+                    currentvoice.setGateRef({value: 0})
+                    delete this.synth.voices.activeVoices[note]
+                
+                    // let index = this.synth.voices.currentVoice
+                    // index - 1 < 0 ? index = 0 : index -= 1
+                    this.synth.voices.currentVoice = Object.keys(this.synth.voices.activeVoices).length 
+                }
+                
+                
+                // this.synth.voices.state[0].setGateRef({value: 0})
             }
         }
     },
     updateLFO1(payload){
         this.lfo1 = payload
     },
-    updateOsc1(name,value){
-        console.log(name)
+    updateOsc(oscilator,name,value){
+        
         switch(name){
             case 'mode' :
+                this.oscilators[oscilator].mode = value
+                this.synthSetup()
                 break;
             case 'level' :
-                this.osc1.level = value
+                this.oscilators[oscilator].level = value
+                this.oscilators[oscilator].setLevelRef({value: value})
                 break;
             case 'pan' :
-                this.osc1.pan = value 
+                this.oscilators[oscilator].pan = value
+                value = mapper(value,0,1,-1,1)
+                
+                this.oscilators[oscilator].setPanRef({value: value})
+                
                 break;
             case 'trans' :
                 break;
@@ -314,9 +475,7 @@ export const store = reactive({
             
         }
     },
-    updateOsc2(payload){
-        this.osc2 = payload
-    },
+
     updateEnv1(name,value) {
         this.env1.adsr[name].value = value
         name !== 'delay' ?  this.env1.adsr[name].setRef({value: value}) : null
@@ -325,22 +484,27 @@ export const store = reactive({
     updateKeyPlay(payload){
         this.keyboard.keyPlay = payload
     },
-    updateFilter1(payload,name){
+    updateFilter(filter,payload,name){
         
         switch(name){
             case 'mode':
-                this.filter1.mode = payload
+                this.filters[filter].mode = payload
+                this.synthSetup()
                 break;
             case 'cutoff':
-                this.filter1.cutoff = payload
+                this.filters[filter].cutoff = payload
                 let newCutoff = mapper(payload,0,100,20,10000);
-                this.filter1.setCutRef({value: newCutoff})
+                this.filters[filter].setCutRef({value: newCutoff})
                 break;
             case 'resonance':
-                this.filter1.resonance = payload
+                this.filters[filter].resonance = payload
                 let newRezo = payload / 10;
-                this.filter1.setRezRef({value: newRezo})
+                this.filters[filter].setRezRef({value: newRezo})
                 break;
+            case 'mix' :
+                this.filters[filter].mix = payload
+                let newMix = payload / 100;
+                this.filters[filter].setMixRef({value: newMix})
             default : 
             break;
         }

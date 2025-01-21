@@ -22,11 +22,13 @@
 <script>
 import {store} from '../../store/store.js'
 export default {
+    props:['mode','cutoff','resonance'],
+
     data(){
         return{
-            width: 224,
-            height: 128,
-            reso : null,
+            width: 16*14,
+            height: 16 * 6,
+            
         }
     },
     methods:{
@@ -36,7 +38,7 @@ export default {
     },
     watch:{
         getStore(oldGetStore,newGetStore){
-            this.reso = newGetStore.resonance //this doesnt matter
+            // this.reso = newGetStore.resonance //this doesnt matter
         }
     },
     computed:{
@@ -47,26 +49,33 @@ export default {
             let h = this.height
             let w = this.width
             
-            let cut = this.getStore.cutoff
+            let cut = this.cutoff
             cut = this.mapper(cut,0,100,0,w)
-            
-            let reso = this.getStore.resonance
+            cut = Math.trunc(cut)
 
-            reso = this.mapper(reso,0,100,h/2,0)
+            let reso = this.resonance
+            reso = this.mapper(reso,0,100,h/2,0+(h/10))
             reso = Math.trunc(reso)
            
-            let r = this.getStore.resonance
+            let r = this.resonance
             r = Math.trunc(r)
             
             let dots = [
-                [0,h/2],
-                [cut-60+(r*0.25)    ,h/2+(r*0.1)], //curve to peak
-                [cut-30+(r*0.28)    ,reso+(r*0.01)], //peak dot 1
-                [cut+(r*0.01)    ,reso-(r*0.3)], //curve between
-                [cut+30-(r*0.28)    ,reso+20-(r/5)], // peak dot 2
-                [cut+80-(r/2)    ,h], //curve down
-                [cut+80          ,h]  //dot
+                [(cut-50),h/2],
+                [cut-5,(reso+5 >= h/2 ? h/2 : reso+5)], 
+                [cut,reso], //the cut point
+                [cut+5,reso+5], 
+                [(cut+50),h],
             ]
+            // let dots = [
+            //     [0,h/2],
+            //     [cut-60+(r*0.25)    ,h/2+(r*0.1)],    //curve to peak
+            //     [cut-30+(r*0.28)    ,reso+(r*0.01)],  //peak dot 1
+            //     [cut+(r*0.01)    ,reso-(r*0.3)],     //curve between
+            //     [cut+30-(r*0.28)    ,reso+20-(r/5)], // peak dot 2
+            //     [cut+80-(r/2)    ,h],               //curve down
+            //     [cut+80          ,h]                //dot
+            // ]
             
             return dots
         },
@@ -74,20 +83,33 @@ export default {
             let h = this.height
             let dots = this.com_Dots
 
-            let str = ''
+            let str = `M 0,${h/2} `
 
             dots.forEach((e,i)=>{
-                if(i == 0){
-                    str += `M ${e[0]},${e[1]}`
+                
+                switch(i){
+                    case 0:
+                        str += `L ${e[0]},${e[1]} `
+                        break;
+                    case 1:
+                        str += `Q ${e[0]-20},${h/2} ${e[0]},${e[1]}`
+                        break;
+                    case 2:
+                        // str += `L ${e[0]},${e[1]} `
+                        // str += `Q ${e[0]-20},${h/2} ${e[0]},${e[1]}`
+                        break;
+                    case 3:
+                        str += `Q ${e[0]-5},${e[1]-10} ${e[0]},${e[1]} `
+                        // str += `L ${e[0]},${e[1]} `
+                        break;
+                    case 4:
+                        str += `Q  ${e[0]-20},${h} ${e[0]},${e[1]}`
+                        break;
                 }
-                if(i%2 != 0){
-                    str += `Q ${e[0]},${e[1]}`
-                }else{
-                    str += `  ${e[0]},${e[1]}`
-                }
+
                 
             })
-            str += `L ${0},${h+10}`
+            str += `L ${0},${h}`
             return str
             // return `M ${0} ${h/2} 
             //         Q ${cut-40-(reso/4)},${h/2}   ${cut-10-(reso/4)} ${reso}
@@ -96,20 +118,17 @@ export default {
             //         L ${0},${h}` 
                     
         }
-    },
-    created(){
-        this.reso = store.filter1.resonance
     }
 }
 </script>
 <style >
     .filter_window{
-        width :224px;
-        height: 128px;
+        width :calc(var(--grid-size) * 14);
+        height: calc(var(--grid-size) * 6);
         background: rgba(15,10,45,1);
         color: rgba(62, 174, 243,1);
         overflow: hidden;
-        border-radius: 5px;
+        /* border-radius: 5px; */
         /* padding:16px; */
         display:block;
     }

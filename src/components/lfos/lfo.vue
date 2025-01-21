@@ -101,10 +101,10 @@ export default {
     
     .lfoMods{
         /* width:80px; */
-        margin-right:calc(2 * var(--graph-size));
+        margin-right:calc(2 * var(--grid-size));
         display:flex;
         flex-direction: column;
-        gap:var(--graph-size);
+        gap:var(--grid-size);
     } 
 
 </style>

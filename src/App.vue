@@ -29,15 +29,17 @@ export default {
    mounted(){
         window.addEventListener("mousedown",this.localMouse);
         window.addEventListener("mouseup",this.localMouse);
+        
    },
    beforeUnmount() {
         window.removeEventListener("mousedown",this.localMouse);
         window.removeEventListener("mouseup",this.localMouse);
+        
     },
    methods:{
     localMouse(event){
         store.updateGlobalMouseDown(event)
-        if(event.type === 'mouseup'){
+        if(event.type === 'mousedown'){
             store.init.core ? null : store.init()//initializeEngine()
         }
     }
