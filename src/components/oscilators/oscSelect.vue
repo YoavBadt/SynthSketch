@@ -67,7 +67,7 @@ export default {
         /* border-left:1px solid rgba(0,0,0,0.2);
         border-top:1px solid rgba(0,0,0,0.2);
         border-bottom:1px solid rgba(0,0,0,0.2); */
-        margin-top:16px;
+        /* margin-top:16px; */
         display:flex;
         flex-direction:row;
         border-radius:3px;

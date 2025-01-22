@@ -1,8 +1,8 @@
 <template >
     <div class="oscilator">
             <div class="osc_knobs">
-                <Title :name="name" width="100%" style="margin-bottom : 16px" />
-                <!-- <div class="viz_head" >{{ name }}</div> -->
+                <!-- <Title :name="name" width="100%"  /> -->
+                <div class="viz_head" >{{ name }}</div>
                 <div class="osc_digits_box">
                     <div class="osc_digits" style="border-right:1px solid rgba(62, 174, 243,1)">
                         <h3>12</h3>
@@ -14,18 +14,17 @@
                     </div >
                 </div>
                 <div class="osc_knobs_box">
-                    
-                    <Knob  :modelValue="osc.level" @update:modelValue="updateStore" show="true" name="level" min="0" max="1" step="0.01" soft="2"/>
-                    <Knob  :modelValue="osc.pan" @update:modelValue="updateStore" show="true" name="pan" min="0" max="1" step="0.01" soft="2"/>
+                    <Knob  name="level" size="big" :value="osc.level" @update:value="updateStore"  :min="0" :max="100" :step="1"/>
+                    <Knob  name="pan"   size="big" :value="osc.pan"   @update:value="updateStore"  :min="0" :max="100" :step="1" soft="2"/>
                 </div>
-
+                
             </div>
-
+            
             <div class="osc_middle">
                 
                 <OscVisual :oscMode="osc.mode"/>
+                <OscSelect :style="{marginTop:'16px'}" :oscNum="oscNum" :mode="osc.mode" @update:mode="updateStore"/>
 
-                <OscSelect :oscNum="oscNum" :mode="osc.mode" @update:mode="updateStore"/>
                 
             </div>
 
@@ -114,7 +113,8 @@ export default {
     .osc_knobs_box{
         display:flex;
         flex-direction:row;
-        gap:32px;
+        gap:calc(2 * var(--grid-size));
+        margin-top:var(--grid-size);
     }
     .osc_buttons{
         width:64px;

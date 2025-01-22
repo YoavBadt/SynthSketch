@@ -12,9 +12,7 @@
             <EnvVisual2 />
             
             <div class="knobs">
-              
-                <Knob  v-for="item in adsr" :modelValue="item.value" @update:modelValue="updateStore" :soft="item.soft" :show="item.show" :name="item.name" :min="item.minmax.min" :max="item.minmax.max" :step="item.step"/>
-              
+                <Knob  v-for="item in adsr" :name="item.name" size="big" :value="item.value"  @update:value="updateStore" :min="0" :max="100" :step="1"/>
             </div>
         </div>
 

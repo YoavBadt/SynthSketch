@@ -10,8 +10,8 @@ html{
   --back: #9e9e9e; 
   --back-active : #8c8c8c;
   --back-selected: #909090;
-  --graph : rgba(0,0,0,0.05);
-  --graph-size:32px;
+  --graph : rgba(0,0,0,0.1);
+  --graph-size:16px;
   --grid-size :16px;
   --highlight : #FF9F1E;
   --card : inset 1px 1px 1px 1px rgba(255,255,255,0.2),inset -2px -1px 1px 1px rgba(0,0,0,0.05);

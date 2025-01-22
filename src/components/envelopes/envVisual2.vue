@@ -68,17 +68,17 @@ export default {
     methods:{
         getVal(){
             let newAdsr = {}
-            let sustainH = this.getEnv.sustain.value
             let susMin = this.getEnv.sustain.minmax.min
             let susMax = this.getEnv.sustain.minmax.max 
+            let sustainH =  this.mapper(this.getEnv.sustain.value,0,100,susMin,susMax )
             sustainH = this.mapper(sustainH,susMin,susMax,0,this.height)
 
                 Object.entries(this.getEnv).forEach((entry)=>{
                     
                     let name = entry[0]
-                    let val = entry[1].value
                     let min = entry[1].minmax.min
                     let max = entry[1].minmax.max
+                    let val = this.mapper(entry[1].value,0,100,min,max )
                     let curve = entry[1].curve
 
                     let newWidth

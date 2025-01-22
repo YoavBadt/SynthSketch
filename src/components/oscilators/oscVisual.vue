@@ -1,6 +1,9 @@
 <template>
-    <div class="osc_window">
-        <svg class="osc_svg" :width="width" :height="height">
+    <div class="osc_window" :style="{
+        width: width + 16 +'px',
+        height: height + 16 + 'px'
+    }">
+        <svg class="osc_svg" width="100%" height="100%">
             <rect width="100%" height="100%" stroke="rgba(62, 174, 243,0.5)" fill="rgba(15,10,45,1)" stroke-width="2"/>
             <line x1="0" x2="100%" y1="50%" y2="50%" stroke="rgba(62, 174, 243,0.2)" stroke-width="2"/>
 
@@ -16,12 +19,13 @@
      </div>
 </template>
 <script>
+import {store} from '../../store/store.js'
 export default {
     props:['oscMode'],
     data(){
         return{
-            width:176,
-            height:112-0
+            width:  11 * store.gridSize,
+            height: 7 * store.gridSize
         }
     },
     computed:{
@@ -57,8 +61,8 @@ export default {
 </script>
 <style>
   .osc_window{
-        width :192px;
-        height: calc(128px - 0);
+        /* width :192px; */
+        /* height: calc(128px - 0); */
         padding:8px;
         background: rgba(15,10,45,1);
         color: rgba(62, 174, 243,1);
