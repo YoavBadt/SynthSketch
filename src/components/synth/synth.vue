@@ -1,9 +1,7 @@
 <template>
   
     <div class="Synth ">
-      <div>
-        
-      </div>
+      <!-- <Threedee /> -->
       <div class="topbar ">
         <!-- <button class="graph-w-8"  @click="init">init</button> -->
       </div>
@@ -43,13 +41,14 @@ import Lfo        from '../../components/lfos/lfo.vue'
 import Osc        from '../../components/oscilators/osc.vue'
 import Filter     from '../../components/filters/filter.vue'
 import Keyboard   from '../../components/keyboard/keyboard.vue'
-import Keyboard2   from '../../components/keyboard/keyboard2.vue'
+import Keyboard2  from '../../components/keyboard/keyboard2.vue'
 import Trial      from '../../components/trial/trial.vue'
+import Threedee   from  '../../components/threedee/threedee.vue'
 
 
 export default{
   components:{
-    Envelopes,Lfo,Osc,Filter,Keyboard,Keyboard2,Trial
+    Envelopes,Lfo,Osc,Filter,Keyboard,Keyboard2,Trial,Threedee
   },
   data(){
     return{
