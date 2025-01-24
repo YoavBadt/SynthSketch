@@ -3,9 +3,10 @@
         <div class="three_menu">
             <input type="range" v-model="movePoint.x" min="0" max="10" step="0.1"/>
             <input type="range" v-model="movePoint.y" min="0" max="10" step="0.1"/>
-            <input type="range" v-model="movePoint.z" min="0" max="20" step="0.1"/>
             <br/>
+            <Knob size="big" name="z" :value="movePoint.z1" @update:value="changeZ" :min="0" :max="100" :step="1"/>
             x : {{ movePoint.x }},<br/> y : {{ movePoint.y }},<br/> z:{{ movePoint.z }}
+            <!-- <div v-for="wall in room.walls">{{ wall.corners }}</div> -->
         </div>
         <svg  :width="width" :height="height">
             <rect width="100%" height="100%" stroke="rgba(62, 174, 243,0.5)" fill="var(--viz-back)" stroke-width="2"/>
@@ -20,8 +21,9 @@
             
             <line v-for="(dot,i) in room_dots" :x1="dot.graph_x" :x2="width-dot.graph_x" :y1="dot.graph_y" :y2="dot.graph_y"  stroke="var(--viz-high-soft)"/>
             <line v-for="(dot,i) in room_dots" :y1="dot.graph_x" :y2="height-dot.graph_x" :x1="dot.graph_y" :x2="dot.graph_y"  stroke="var(--viz-high-soft)"/>
-            <g v-for="(tile,i) in tiles">
-                <line v-for="facet in tile" :x1="facet.x1" :y1="facet.y1" :x2="facet.x2" :y2="facet.y2" stroke="var(--viz-high-soft)"/>
+            
+            <g v-for="facet in tiles">
+                <line  :x1="facet.x1" :y1="facet.y1" :x2="facet.x2" :y2="facet.y2" stroke="var(--viz-high-soft)"/>
             </g>    
 
 
@@ -38,6 +40,13 @@
             </g>
             <line v-for="line in lines" :x1="line.from.x" :x2="line.to.x" :y1="line.from.y" :y2="line.to.y" stroke="rgba(62, 174, 243,1)" stroke-width="1"/>   -->
 
+            <g v-for="wall in room.walls">
+                
+                <circle v-for="tile in wall.tiles" :display="wall.display" :cx="tile.graph_x" :cy="tile.graph_y" fill="var(--viz-high-soft)" r="2"></circle>
+            </g>
+
+
+
         </svg>
         
     </div>
@@ -51,11 +60,12 @@ export default {
             graph : 10,
             divisions: 40,
             backwall : 80,
+            room : [],
             tiles : [],
             points : [], 
             lines : [],
             movePoint:{
-                x:1,y:2,z:3
+                x:1,y:2,z:3,z1:30
             }
         }
     },
@@ -95,11 +105,11 @@ export default {
 
             switch(dimention){
                 case 'width':
-                    i > div/2 ? log = end * (log3 / log2) : log = end * log1 / log2
+                    i > div/2 ? log = end * (log3 / log2) : log = end * (log1 / log2)
                     
                     break;
                 case 'height':
-                    i > div/2 ? log = this.height - end * (log3 / log2) : log = end * log1 / log2
+                    i > div/2 ? log = this.height - end * (log3 / log2) : log = end * (log1 / log2)
                     break;
                 default:
                     break;
@@ -132,6 +142,27 @@ export default {
                 }
             }
             return axis
+        },
+        changeZ(name,value){
+            
+            this.movePoint.z = this.mapper(value,0,100,0,20)
+            this.movePoint.z1 = value
+            // console.log(value)
+            // let old = this.movePoint.z
+            // let newValue 
+
+            // if(old < value){
+            //     newValue = old + 0.1
+            //     newValue = Math.trunc(newValue * 10) / 10 
+            // }else{
+            //     newValue = old - 0.1
+            //     newValue = Math.trunc(newValue * 10) / 10
+            // }
+            // newValue < 0 ? newValue = 0 : null
+            // newValue > 20 ? newValue = 20 : null
+            
+            // this.movePoint.z = newValue
+
         },
         generateSphericalCoordinates(numPoints, radius) {
 
@@ -268,45 +299,166 @@ export default {
     },
     mounted(){
         let facet = []
-        
         for(let f=0;f<11;f++){
+            let obj = {}
+            for(let a=0;a<4;a++){
+                switch(a){
+                    case 0:
+                        obj.x = f
+                        obj.y = 0
+                    break;
+                    case 1:
+                        obj.x = f
+                        obj.y = 10
+                    break;
+                    case 2:
+                        obj.x = 10
+                        obj.y = f
+                    break;
+                    case 3:
+                        obj.x = 0
+                        obj.y = f
+                    break;
+                    default:
+                    break;
+                }
             
+            obj.z = 20
+            let obj2 = {}
+            obj2.x = obj.x
+            obj2.y = obj.y
+            obj2.z = 0
             facet.push({
-                x1:this.getPos({x:f,y:0,z:20}).graph_x,
-                y1:this.getPos({x:f,y:0,z:20}).graph_y,
-                x2:this.getPos({x:f,y:0,z:0}).graph_x,
-                y2:this.getPos({x:f,y:0,z:0}).graph_y,
+                x1:this.getPos(obj).graph_x,
+                y1:this.getPos(obj).graph_y,
+                x2:this.getPos(obj2).graph_x,
+                y2:this.getPos(obj2).graph_y,
             })
         }
-        for(let f=0;f<11;f++){
-            facet.push({
-                x1:this.getPos({x:f,y:10,z:20}).graph_x,
-                y1:this.getPos({x:f,y:10,z:20}).graph_y,
-                x2:this.getPos({x:f,y:10,z:0}).graph_x,
-                y2:this.getPos({x:f,y:10,z:0}).graph_y,
-                    
-            })
-        }
-        for(let f=0;f<11;f++){
-            facet.push({
-                x1:this.getPos({x:10,y:f,z:20}).graph_x,
-                y1:this.getPos({x:10,y:f,z:20}).graph_y,
-                x2:this.getPos({x:10,y:f,z:0}).graph_x,
-                y2:this.getPos({x:10,y:f,z:0}).graph_y,
-                    
-            })
-        }
-        for(let f=0;f<11;f++){
-            facet.push({
-                x1:this.getPos({x:0,y:f,z:20}).graph_x,
-                y1:this.getPos({x:0,y:f,z:20}).graph_y,
-                x2:this.getPos({x:0,y:f,z:0}).graph_x,
-                y2:this.getPos({x:0,y:f,z:0}).graph_y,
-                    
-            })
-        }    
-            this.tiles.push(facet)
         
+        }
+        this.tiles.push(...facet)
+        
+        let room = {
+            width : 100,
+            height : 100,
+            depth : 200,
+            walls : [
+                {
+                    name : 'front',
+                    corners : [{x:0,y:100,z:0},{x:100,y:100,z:0},{x:100,y:0,z:0},{x:0,y:0,z:0}],
+                    display: 'none'
+                },{
+                    name : 'back',
+                    corners : [{x:0,y:100,z:200},{x:100,y:100,z:200},{x:100,y:0,z:200},{x:0,y:0,z:200}]
+                },{
+                    name : 'left',
+                    corners : [{x:0,y:100,z:0},{x:0,y:100,z:200},{x:0,y:0,z:200},{x:0,y:0,z:0}],
+                    display: ''
+                },{
+                    name : 'right',
+                    corners : [{x:100,y:100,z:0},{x:100,y:100,z:200},{x:100,y:0,z:200},{x:100,y:0,z:0}],
+                    display: ''
+                },{
+                    name : 'top',
+                    corners : [{x:0,y:100,z:0},{x:0,y:100,z:200},{x:0,y:0,z:200},{x:0,y:0,z:0}],
+                    display: ''
+                },{
+                    name : 'bottom',
+                    corners : [{x:0,y:0,z:0},{x:0,y:0,z:200},{x:100,y:0,z:200},{x:100,y:0,z:0}],
+                    display: ''
+                }
+            ] 
+        }
+
+        room.walls.forEach((wall)=>{
+            let tiles = []
+                
+            wall.corners.forEach((corner)=>{
+                corner.graph_x = null
+                corner.graph_y = null
+                let obj = {
+                    x : corner.x,
+                    y : corner.y,
+                    z : corner.z,
+                    graph_x :corner.graph_x,
+                    graph_y :corner.graph_y
+                }
+                tiles.push(obj)
+            })
+            
+            
+            let div_1 = 20
+            let div_2 = 10
+            wall.name == 'back' || wall.name === 'front' ? div_1 = 10 : null
+            
+                for(let dim_1 =0; dim_1<=div_1; dim_1++){
+                        for(let dim_2=0;dim_2<=div_2; dim_2++){
+
+                            let d_x 
+                            let d_y = 100/10 * dim_2
+                            let d_z = 200/20 * dim_1
+                            switch(wall.name){
+                                case 'back':
+                                    d_x = 100/10 * dim_1
+                                    d_z = 200
+                                    break;
+                                case 'front':
+                                    d_x = 100/10 * dim_1
+                                    d_z = 0
+                                    break;
+                                case 'bottom':
+                                    d_x = 100/10 * dim_2
+                                    d_y = 0
+                                    break;
+                                case 'top':
+                                    d_x = 100/10 * dim_2
+                                    d_y = 100
+                                    break;
+                                case 'left':
+                                    d_x = 0
+                                    break;
+                                case 'right':
+                                    d_x = 100
+                                    break;
+                                default:
+                                    break;
+                            }
+
+                            tiles.push({
+                                x : d_x,
+                                y : d_y,
+                                z : d_z,
+                                graph_x : null,
+                                graph_y : null
+                            })
+                        }
+                    
+
+            }
+
+            wall.tiles = tiles
+            
+
+        })
+
+        room.walls.forEach((wall)=>{
+            wall.tiles.forEach((tile)=>{
+                let obj={
+                    x : this.mapper(tile.x,0,100,0,10),
+                    y : this.mapper(tile.y,0,100,0,10),
+                    z : this.mapper(tile.z,0,200,0,20)
+
+                }
+                
+                tile.graph_x = this.getPos(obj).graph_x
+                tile.graph_y = this.getPos(obj).graph_y
+            })
+        })
+
+        this.room = room
+        
+
     }
 
 }
