@@ -1,7 +1,7 @@
 <template>
   
     <div class="Synth ">
-      <!-- <Threedee /> -->
+      <Threedee />
       <div class="topbar ">
         <!-- <button class="graph-w-8"  @click="init">init</button> -->
       </div>

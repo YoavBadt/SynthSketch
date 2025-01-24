@@ -14,6 +14,7 @@ html{
   --graph-size:16px;
   --grid-size :16px;
   --highlight : #FF9F1E;
+  --highlight-soft : rgba(255, 159, 30,0.5);
   --card : inset 1px 1px 1px 1px rgba(255,255,255,0.2),inset -2px -1px 1px 1px rgba(0,0,0,0.05);
   --grad : linear-gradient(160deg, rgba(255, 255, 255,0.15) 0%,rgba(255,255,255,0) 30%);
   --viz-back : rgba(15,10,45,1);

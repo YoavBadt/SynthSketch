@@ -1,14 +1,42 @@
 <template >
     <div class="threedee">
-        <!-- <div v-for="(dot,i) in points">{{dot.x}}</div> -->
-        <svg class="osc_svg" width="100%" height="100%">
-            <rect width="100%" height="100%" stroke="rgba(62, 174, 243,0.5)" fill="rgba(15,10,45,1)" stroke-width="2"/>
+        <div class="three_menu">
+            <input type="range" v-model="movePoint.x" min="0" max="10" step="0.1"/>
+            <input type="range" v-model="movePoint.y" min="0" max="10" step="0.1"/>
+            <input type="range" v-model="movePoint.z" min="0" max="20" step="0.1"/>
+            <br/>
+            x : {{ movePoint.x }},<br/> y : {{ movePoint.y }},<br/> z:{{ movePoint.z }}
+        </div>
+        <svg  :width="width" :height="height">
+            <rect width="100%" height="100%" stroke="rgba(62, 174, 243,0.5)" fill="var(--viz-back)" stroke-width="2"/>
 
-            <g v-for="(dot,i) in points">
+            <g class="t_graph">
+                <rect :x="width/2-backwall/2" :y="height/2-backwall/2" :width="backwall" :height="backwall" fill="none" stroke="var(--viz-high-soft)"/>
+                <g v-for="(n,i) in 11">
+                    <line class="t_graph_x"  :x1="(width/2-40)+(i*(80/graph))" :x2="(width/2-40)+(i*(80/graph))" :y1="height/2-40" :y2="height/2+40" stroke="var(--viz-high-soft)"/>
+                    <line class="t_graph_x"  :x1="(height/2-40)" :x2="(height/2+40)" :y1="(height/2-40)+(i*(80/graph))" :y2="(height/2-40)+(i*(80/graph))" stroke="var(--viz-high-soft)"/>
+                </g>
+            </g>
+            
+            <line v-for="(dot,i) in room_dots" :x1="dot.graph_x" :x2="width-dot.graph_x" :y1="dot.graph_y" :y2="dot.graph_y"  stroke="var(--viz-high-soft)"/>
+            <line v-for="(dot,i) in room_dots" :y1="dot.graph_x" :y2="height-dot.graph_x" :x1="dot.graph_y" :x2="dot.graph_y"  stroke="var(--viz-high-soft)"/>
+            <g v-for="(tile,i) in tiles">
+                <line v-for="facet in tile" :x1="facet.x1" :y1="facet.y1" :x2="facet.x2" :y2="facet.y2" stroke="var(--viz-high-soft)"/>
+            </g>    
+
+
+
+            <circle :cx="getPos(movePoint).graph_x" :cy="getPos(movePoint).graph_y" r="2" fill="var(--viz-back)"  stroke="var(--viz-high)"></circle> 
+            <g v-for="(line) in axis(movePoint)">
+                <line :x1="line.x1" :y1="line.y1" :x2="line.x2" :y2="line.y2" stroke="var(--highlight-soft)" />
+            </g>
+
+            <!-- dode trial -->
+            <!-- <g v-for="(dot,i) in points">
                 <circle :cx="dot.x" :cy="dot.y" :r="dot.size" :fill="dot.color" :display="dot.display" stroke="black"></circle>
                    
             </g>
-            <line v-for="line in lines" :x1="line.from.x" :x2="line.to.x" :y1="line.from.y" :y2="line.to.y" stroke="rgba(62, 174, 243,1)" stroke-width="1"/>  
+            <line v-for="line in lines" :x1="line.from.x" :x2="line.to.x" :y1="line.from.y" :y2="line.to.y" stroke="rgba(62, 174, 243,1)" stroke-width="1"/>   -->
 
         </svg>
         
@@ -18,13 +46,93 @@
 export default {
     data(){
         return {
-            points : [],
-            lines : [],
             width :800,
-            height :800
+            height :800,
+            graph : 10,
+            divisions: 40,
+            backwall : 80,
+            tiles : [],
+            points : [], 
+            lines : [],
+            movePoint:{
+                x:1,y:2,z:3
+            }
         }
     },
     methods : {
+        getPos(point){
+            
+            let x = point.x
+            let y = point.y
+            let z = point.z
+
+            let width = this.width
+            let height = this.height
+
+            let graph_x = width/10 * x
+            let graph_y = height - height/10 * y
+
+            if(z>0){
+                let log_x = this.getLog('width',z)
+
+                graph_x = graph_x + log_x - (log_x/5 * x)
+                graph_y = graph_y - log_x + (log_x/5 * y)
+            }
+
+
+            return {graph_x,graph_y}
+        },
+        getLog(dimention,i){
+            let back = this.backwall / 2
+            let div = this.divisions
+            let log
+            let end = (this.width/2-back)
+            let log1 = Math.log(i + 1)
+
+            let log2 = Math.log(div/2+1)
+
+            let log3 = Math.log(i - (div/2-1) )
+
+            switch(dimention){
+                case 'width':
+                    i > div/2 ? log = end * (log3 / log2) : log = end * log1 / log2
+                    
+                    break;
+                case 'height':
+                    i > div/2 ? log = this.height - end * (log3 / log2) : log = end * log1 / log2
+                    break;
+                default:
+                    break;
+            }
+            
+            return log
+        },
+        axis(point){
+            let x = point.x
+            let y = point.y
+            let z = point.z
+            let axis = {
+                horizontal : {
+                    x1 : this.getPos({x:0,y,z}).graph_x,
+                    x2 : this.getPos({x:10,y,z}).graph_x,
+                    y1 : this.getPos({x,y,z}).graph_y,
+                    y2 : this.getPos({x,y,z}).graph_y,
+                },
+                vertical : {
+                    x1 : this.getPos({x,y,z}).graph_x,
+                    x2 : this.getPos({x,y,z}).graph_x,
+                    y1 : this.getPos({x,y:0,z}).graph_y,
+                    y2 : this.getPos({x,y:10,z}).graph_y,
+                },
+                depth : {
+                    x1 : this.getPos({x,y,z:20}).graph_x,
+                    y1 : this.getPos({x,y,z:20}).graph_y,
+                    x2 : this.getPos({x,y,z:0}).graph_x,
+                    y2 : this.getPos({x,y,z:0}).graph_y,
+                }
+            }
+            return axis
+        },
         generateSphericalCoordinates(numPoints, radius) {
 
             const points = []
@@ -54,40 +162,6 @@ export default {
         },
         mapper(value, x1, y1, x2, y2){
             return (value - x1) * (y2 - x2) / (y1 - x1) + x2;
-        },
-        drawlines(points){
-            const lines = []
-            
-            let something = 11
-            let something2 = 8
-            lines.push({ from: points.find(e => e.cIndex == something), to: points.find(e => e.cIndex == something2) })
-
-            something = 8
-            something2 = 5
-            lines.push({ from: points.find(e => e.cIndex == something), to: points.find(e => e.cIndex == something2) })
-
-            something = 10
-            something2 = 17
-            // lines.push({ from: points.find(e => e.cIndex == something), to: points.find(e => e.cIndex == something2) })
-            // for (let i = 1; i < points.length; i++) {
-            //     const currentPoint = points[i];
-
-            //     // Neighbors: the next and previous points (with modular arithmetic for wrapping)
-            //     // const prevPoint = points[(i - 1 + points.length) % points.length];
-            //     // const nextPoint = points[(i + 1) % points.length];
-
-            //     const prevPoint = points.find(e => e.cIndex  == 5);
-            //     const nextPoint = points.find(e => e.cIndex  == 5);
-
-                    
-            //     // Draw line from current point to previous neighbor
-            //     lines.push({ from: currentPoint, to: prevPoint });
-                
-            //     // Draw line from current point to next neighbor
-            //     lines.push({ from: currentPoint, to: nextPoint });
-            // }
-
-            return lines;
         },
         euclideanDistance(p1, p2) {
             return Math.sqrt(Math.pow(p2.x - p1.x, 2) + Math.pow(p2.y - p1.y, 2) + Math.pow(p2.z - p1.z, 2));
@@ -135,67 +209,103 @@ export default {
 
         return lines;
         },
-        generateGrid(){
-            let points = []
+        getAngle(angle) {
+            let radius = this.width * 0.71
+            const radians = (angle * Math.PI) / 180; // Convert angle from degrees to radians
+            const x = radius * Math.cos(radians) + 400;
+            const y = radius * Math.sin(radians) + 400;
+            return { x, y };
+        },
+        
+        
+    },
+    computed:{
+        
+        graph_dots(){
+            let graph_dots = []
+            let width = this.width
+            let height = this.height
+            let graph = this.graph
+            let center = {x: width/2, y: height/2}
 
-            for(let x = -5;x<=5;x+=1){
-                for(let y = -5;y<=5;y+=1){
-                    for(let z = -5;z<=5;z+=1){
-                        points.push(
-                        {
-                            x: x,
-                            y: y,
-                            z: z,
-                            display: ''
-                        }
-                        )
-                    }
-                        
-                    
-                }
+            graph_dots.push(
+                {x:0,y:0},
+                {x: 1,y: 1},
+                {x: -8,y: -3},
+                {x: 1,y: -1},
+                {x: -1,y: 1},
+            )
+            
+            graph_dots.forEach((e)=>{
+                e.x = center.x + (e.x * width/graph)
+                e.y = center.y + (e.y * height/graph)
+            })
+
+            return graph_dots
+        },
+        room_dots(){
+            let width = this.width
+            let height = this.height
+            let back = this.backwall / 2
+            let div = this.divisions
+            
+            let room_dots = []
+
+            for(let i=0;i<div;i+=1){
+                let dot = {}   
+
+                dot.graph_x = this.getLog('width',i) 
+                dot.graph_y = this.getLog('height',i)
+                
+                room_dots.push(dot)
+            
                 
             }
 
-            return points
+            return room_dots
+
         }
     },
     mounted(){
-        // this.points = this.generateSphericalCoordinates(240, 100)
-        this.points = this.generateGrid()
-        // this.lines = this.drawlines(this.points)
-        // this.lines = this.findNearestNeighbors(this.points)
-
-        this.points.forEach((e,i)=>{
-
-            // e.front = e.z >= 0 ? true : false;
-            // let color = this.mapper(e.z,4,16,0,255)
-            e.color = 'blue'
-            if(e.z < 0 ){ 
-                // e.display= 'none'
-                e.y += -10
-                e.color = 'red'
-            }
-            if(e.y > -5){
-                e.display= 'none'
-            }
+        let facet = []
+        
+        for(let f=0;f<11;f++){
             
-            
-            
-                // e.display= 'none'
-                
-                // e.color = e.front ? 'blue' : `rgba(${color},${color},${color},1)`
-            
-            
-
-
-            e.size = this.mapper(e.z,-5,5,4,16)
-            e.x = this.mapper(e.x,-5,5,0,this.width)
-            e.y = this.mapper(e.y,5,-5,0,this.height)
-            
-            
-            
-        })
-        // this.points.sort((a,b) => a.z < b.z ? -1 : 1)
+            facet.push({
+                x1:this.getPos({x:f,y:0,z:20}).graph_x,
+                y1:this.getPos({x:f,y:0,z:20}).graph_y,
+                x2:this.getPos({x:f,y:0,z:0}).graph_x,
+                y2:this.getPos({x:f,y:0,z:0}).graph_y,
+            })
+        }
+        for(let f=0;f<11;f++){
+            facet.push({
+                x1:this.getPos({x:f,y:10,z:20}).graph_x,
+                y1:this.getPos({x:f,y:10,z:20}).graph_y,
+                x2:this.getPos({x:f,y:10,z:0}).graph_x,
+                y2:this.getPos({x:f,y:10,z:0}).graph_y,
+                    
+            })
+        }
+        for(let f=0;f<11;f++){
+            facet.push({
+                x1:this.getPos({x:10,y:f,z:20}).graph_x,
+                y1:this.getPos({x:10,y:f,z:20}).graph_y,
+                x2:this.getPos({x:10,y:f,z:0}).graph_x,
+                y2:this.getPos({x:10,y:f,z:0}).graph_y,
+                    
+            })
+        }
+        for(let f=0;f<11;f++){
+            facet.push({
+                x1:this.getPos({x:0,y:f,z:20}).graph_x,
+                y1:this.getPos({x:0,y:f,z:20}).graph_y,
+                x2:this.getPos({x:0,y:f,z:0}).graph_x,
+                y2:this.getPos({x:0,y:f,z:0}).graph_y,
+                    
+            })
+        }    
+            this.tiles.push(facet)
         
     }
 
@@ -207,8 +317,17 @@ export default {
         position:absolute;
         z-index:10;
         background:white;
-        width:800px;
+        width:1000px;
         height:800px;
         left:25%;
+        display:grid;
+        grid-template-columns: 200px 1fr;
+        overflow:hidden;
+        outline:1px solid grey;
+        border-radius:5px;
+
+    }
+    .three_menu{
+        background: var(--back)
     }
 </style>
