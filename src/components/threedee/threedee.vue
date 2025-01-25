@@ -45,8 +45,9 @@
                 <circle v-for="tile in wall.tiles" :display="wall.display" :cx="tile.graph_x" :cy="tile.graph_y" fill="var(--viz-high-soft)" r="2"></circle>
             </g>
 
-
-
+            <circle  v-for="n in 10" :cx="getPos2({x:10 ,y:0 ,z:n*1-1}).graph_x" :cy="getPos2({x:10 ,y:0 ,z:n*1-1}).graph_y" fill="red"   r="4"></circle>
+            <circle  v-for="n in 10" :cx="getPos2({x:0,y:0 ,z:n*1-1}).graph_x" :cy="getPos2({x:0,y:0 ,z:n*1-1}).graph_y" fill="green" r="4"></circle>
+            <circle  v-for="n in 10" :cx="getPos2({x:0 ,y:10,z:n*1-1}).graph_x" :cy="getPos2({x:0 ,y:10,z:n*1-1}).graph_y" fill="blue"  r="4"></circle>
         </svg>
         
     </div>
@@ -82,13 +83,10 @@ export default {
             let graph_x = width/10 * x
             let graph_y = height - height/10 * y
 
-            if(z>0){
-                let log_x = this.getLog('width',z)
+            let log_x = this.getLog('width',z)
 
-                graph_x = graph_x + log_x - (log_x/5 * x)
-                graph_y = graph_y - log_x + (log_x/5 * y)
-            }
-
+            graph_x = graph_x + log_x - (log_x/5 * x)
+            graph_y = graph_y - log_x + (log_x/5 * y)
 
             return {graph_x,graph_y}
         },
@@ -97,12 +95,13 @@ export default {
             let div = this.divisions
             let log
             let end = (this.width/2-back)
+
             let log1 = Math.log(i + 1)
 
-            let log2 = Math.log(div/2+1)
+            let log2 = Math.log(div/2+1) //21
 
-            let log3 = Math.log(i - (div/2-1) )
-
+            let log3 = Math.log(i - (div/2-1) ) 
+            
             switch(dimention){
                 case 'width':
                     i > div/2 ? log = end * (log3 / log2) : log = end * (log1 / log2)
@@ -247,8 +246,50 @@ export default {
             const y = radius * Math.sin(radians) + 400;
             return { x, y };
         },
-        
-        
+        getPos2(point){
+            
+            let x = point.x
+            let y = point.y
+            let z = point.z
+
+            let width = this.width
+            let height = this.height
+
+            let back = this.width/this.room.backwall // should be 80
+            let end = (this.width/2-back/2)
+
+            let depth_div = this.room.depth_div
+            let div = this.room.div
+            
+            
+            //when z is 0 
+            let graph_x = width/div * x 
+            let graph_y = height - height/div * y
+
+            
+                let log = this.getLog2(end,depth_div,z) 
+                
+                graph_x = log + ( ( width-(log*2) ) / div * x ) 
+
+                graph_y = (height-log) - ( ( height-(log*2) ) / div * y)
+
+                //YES!! just division of the subtracted distance!!!
+            
+
+            return {graph_x,graph_y}
+        },
+        getLog2(end,divs,pos){
+            let position;
+            for (let i = 0; i <= divs; i++) {
+                const x = end * (Math.log(1 + i) / Math.log(1 + divs)); // Calculate x position
+                if(i == pos){
+                    position = x ;
+                    break; 
+
+                } 
+            }
+            return position;
+        }
     },
     computed:{
         
@@ -297,7 +338,7 @@ export default {
 
         }
     },
-    mounted(){
+    created(){
         let facet = []
         for(let f=0;f<11;f++){
             let obj = {}
@@ -339,38 +380,54 @@ export default {
         }
         this.tiles.push(...facet)
         
+        let frontLeftTop = {x:0,y:100,z:0}
+        let frontRightTop = {x:100,y:100,z:0}
+        let frontLeftBottom = {x:0,y:0,z:0}
+        let frontRightBottom = {x:100,y:0,z:0}
+
+        let backLeftTop = {x:0,y:100,z:200}
+        let backRightTop = {x:100,y:100,z:200}
+        let backLeftBottom = {x:0,y:0,z:200}
+        let backRightBottom = {x:100,y:0,z:200}
+
+
         let room = {
-            width : 100,
-            height : 100,
-            depth : 200,
+            width  : 100,  //for positioning
+            height : 100, //for positioning
+            depth  : 200,  //for positioning
+            backwall : 10,
+            depth_div : 20, //for drawing the grid
+            div :10, //for drawing the grid
+
             walls : [
                 {
                     name : 'front',
-                    corners : [{x:0,y:100,z:0},{x:100,y:100,z:0},{x:100,y:0,z:0},{x:0,y:0,z:0}],
+                    corners : [frontLeftTop,frontRightTop,frontLeftBottom,frontRightBottom],
                     display: 'none'
                 },{
                     name : 'back',
-                    corners : [{x:0,y:100,z:200},{x:100,y:100,z:200},{x:100,y:0,z:200},{x:0,y:0,z:200}]
+                    corners : [backLeftTop,backRightTop,backLeftBottom,backRightBottom]
                 },{
                     name : 'left',
-                    corners : [{x:0,y:100,z:0},{x:0,y:100,z:200},{x:0,y:0,z:200},{x:0,y:0,z:0}],
+                    corners : [frontLeftTop,backLeftTop,backLeftBottom,frontLeftBottom],
                     display: ''
                 },{
                     name : 'right',
-                    corners : [{x:100,y:100,z:0},{x:100,y:100,z:200},{x:100,y:0,z:200},{x:100,y:0,z:0}],
+                    corners : [frontRightTop,backRightTop,backRightBottom,frontRightBottom],
                     display: ''
                 },{
                     name : 'top',
-                    corners : [{x:0,y:100,z:0},{x:0,y:100,z:200},{x:0,y:0,z:200},{x:0,y:0,z:0}],
+                    corners : [frontLeftTop,backLeftTop,backLeftBottom,frontLeftBottom],
                     display: ''
                 },{
                     name : 'bottom',
-                    corners : [{x:0,y:0,z:0},{x:0,y:0,z:200},{x:100,y:0,z:200},{x:100,y:0,z:0}],
+                    corners : [frontLeftBottom,backLeftBottom,backRightBottom,frontRightBottom],
                     display: ''
                 }
             ] 
         }
 
+        //construct
         room.walls.forEach((wall)=>{
             let tiles = []
                 
@@ -442,7 +499,22 @@ export default {
 
         })
 
+
+        // render
         room.walls.forEach((wall)=>{
+
+            wall.corners.forEach((corner)=>{
+                let obj={
+                    x : this.mapper(corner.x,0,100,0,10),
+                    y : this.mapper(corner.y,0,100,0,10),
+                    z : this.mapper(corner.z,0,200,0,20)
+
+                }
+                
+                corner.graph_x = this.getPos(obj).graph_x
+                corner.graph_y = this.getPos(obj).graph_y     
+            })
+
             wall.tiles.forEach((tile)=>{
                 let obj={
                     x : this.mapper(tile.x,0,100,0,10),
