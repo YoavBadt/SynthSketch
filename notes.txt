@@ -1,0 +1,96 @@
+
+Room should have zoom
+
+Change perspective
+
+Change back wall graphic size
+
+Concave room?
+
+y should be logorythmic? 
+
+should the divisions be logorathytmic ?
+
+mirror frequency from zero in all directions?
+
+is this just a mandala with logorythmis?
+
+cancel effect closer to zero for hollow objects
+
+dragon curves (pipe thing)
+
+view room from side, top (for adjusting effect amount change on axis,  or linear)
+
+graphicly disapear in distance with gradient (https://vanseodesign.com/web-design/svg-linear-gradients/)
+gradient for where note is playing on line
+
+1.story
+2.mandala
+3.room
+
+lord jah bless I pray that you will bring peace to the children of zion
+
+dem wanna talk to me about my ocupation
+all dem hyporcrites sitting in the united nation
+talking down to me like some big revelation
+been living this war since the day I was born
+200 years long
+I an I are da ppl they exile so they can get along
+a
+
+and how can I control my hotheads 
+when islam don chill
+how can I bring dem simmer down
+when islam gone kill
+
+
+aphantasia
+Not everyone experiences mental imagery the same way. Some people "see" vivid, detailed images in their mind, while others have less distinct or even no visual imagery (a condition called aphantasia).
+
+aphasia, ataxia, synesthesia,Hyperphantasia
+
+Chromesthesia: Sounds or music evoke colors or shapes.
+Spatial Sequence Synesthesia: Music evokes spatial or geometric patterns
+
+
+my z axis can be logorythmic decay in amplitude...its is...actualy...that...
+
+
+"Logarithmic envelopes: The attack, decay, and release curves of a compressor or synthesizer envelope are often modeled using logarithmic functions to feel "natural" to human perception."
+"Frequency modulation: When implementing modulation (e.g., FM, PM), logarithms might be used to map perceived pitch changes.
+Amplitude envelopes: Logarithmic curves can be used for attack/decay shapes to feel natural to listeners.
+
+For example, here’s an exponential decay:
+
+function exponentialDecay(t, tau) {
+  return Math.exp(-t / tau); // 'tau' controls the rate of decay
+}
+
+he visual cortex (especially V1, the primary visual cortex) is organized retinotopically.
+
+
+
+Point Clouds
+
+
+x detune (alternating on Y) as distance from center increases
+
+checkers
+
+articulate the room!
+
+use noise as background (or walls)
+
+magnetic rooms 
+
+round rooms
+
+hexagonal rooms
+
+room panning : phases invert, noise (-1 till 0, 0 till 1 ?), perspective panning yes no,
+
+emphasis on grid points in terms of eq (peaks), the whole thing is a comb filter? 
+
+choose fundamental as y.0 and then log() away from the horizon towards up and down (just like the z lines)
+
+log() the squeeze on the Y as Z goes backward (perspective frequency)

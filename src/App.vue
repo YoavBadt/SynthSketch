@@ -40,7 +40,7 @@ export default {
     localMouse(event){
         store.updateGlobalMouseDown(event)
         if(event.type === 'mousedown'){
-            store.init.core ? null : store.init()//initializeEngine()
+            // store.init.core ? null : store.init()
         }
     }
    }

@@ -1,9 +1,13 @@
 <template>
   
     <div class="Synth ">
-      <Threedee />
+      <Threedee v-if="ThreeDee"/>
       <div class="topbar ">
-        <!-- <button class="graph-w-8"  @click="init">init</button> -->
+
+        <button class="graph-w-8"  @click="ThreeDee = !ThreeDee">
+          <template v-if="!ThreeDee">Open</template>
+          <template v-if="ThreeDee">Close</template>
+          Three Dee</button>
       </div>
       
       <div class="row2">
@@ -53,13 +57,14 @@ export default{
   data(){
     return{
       store,
+      ThreeDee : false,
       synth:{}
       
     }
   },
   methods:{
     init(){
-        initializeEngine()
+        // initializeEngine()
         // MidiInit()
     },
     toneStart(){
